@@ -14,10 +14,18 @@ namespace SrORy
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            string action = Request["action"];
 
+            //tùy theo action mà gọi hàm tương ứng để xử lý
+            switch (action)
+            {
+                case "them_user":
+                    them_user();
+                    break;               
+            }
         }
 
-        const string cnStr = @"Data Source=STORMER;Initial Catalog=Banhang;Integrated Security=True";
+        const string cnStr = @"Data Source=STORMER;Initial Catalog=Story;Integrated Security=True";
         class User
         {
             public string name_user,email_user,password_user, birthday, gender;
@@ -27,7 +35,7 @@ namespace SrORy
             public bool ok; //true/false => báo thêm thành công hay ko
             public string error; //nếu có lỗi thì chi tiết báo lỗi ở đây
         }
-        void them_kh()
+        void them_user()
         {
             Data_them_user R = new Data_them_user();
             try
@@ -48,7 +56,7 @@ namespace SrORy
 
                 SqlConnection cn = new SqlConnection(cnStr);
                 cn.Open();
-                string sql = "SP_User";
+                string sql = "SP_user";
                 SqlCommand cm = new SqlCommand(sql, cn);
                 cm.CommandType = CommandType.StoredProcedure;
                 cm.Parameters.Add("@action", SqlDbType.NVarChar, 50).Value = "them_user";

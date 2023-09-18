@@ -81,7 +81,10 @@
     <Content Include="images\icons\favicon.ico" />
     <Content Include="images\img-01.png" />
     <Content Include="index.html" />
+    <Content Include="js\Login.js" />
     <Content Include="js\main.js" />
+    <Content Include="js\user.js" />
+    <Content Include="Login.html" />
     <Content Include="vendor\animate\animate.css" />
     <Content Include="vendor\bootstrap\css\bootstrap-grid.css" />
     <Content Include="vendor\bootstrap\css\bootstrap-grid.min.css" />
@@ -89,6 +92,7 @@
     <Content Include="vendor\bootstrap\css\bootstrap-reboot.min.css" />
     <Content Include="vendor\bootstrap\css\bootstrap.css" />
     <Content Include="vendor\bootstrap\css\bootstrap.min.css" />
+    <Content Include="vendor\bootstrap\js\bootstrap.bundle.min.js" />
     <Content Include="vendor\bootstrap\js\bootstrap.js" />
     <Content Include="vendor\bootstrap\js\bootstrap.min.js" />
     <Content Include="vendor\bootstrap\js\popper.js" />
@@ -97,6 +101,9 @@
     <Content Include="vendor\css-hamburgers\hamburgers.css" />
     <Content Include="vendor\css-hamburgers\hamburgers.min.css" />
     <Content Include="vendor\jquery\jquery-3.2.1.min.js" />
+    <Content Include="vendor\jquery\jquery-confirm.css" />
+    <Content Include="vendor\jquery\jquery-confirm.js" />
+    <Content Include="vendor\jquery\jquery.min.js" />
     <Content Include="vendor\select2\select2.css" />
     <Content Include="vendor\select2\select2.js" />
     <Content Include="vendor\select2\select2.min.css" />

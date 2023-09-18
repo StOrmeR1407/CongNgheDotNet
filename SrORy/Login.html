@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Đăng kí</title>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="js/Login.js"></script>
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <link href="vendor/jquery/jquery-confirm.css" rel="stylesheet" />
+    <script src="vendor/jquery/jquery-confirm.js"></script>
+    <script>
+        function myFunction() {
+            var x = document.getElementById("password_user");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
+</head>
+<body>
+    Tên:<input type="text" name="name_user" id="name_user" value="" />
+    <br />
+    Email:<input type="text" name="email_user" id="email_user" value="" />
+    <br />
+    Password:<input type="password" id="password_user" name="password" value="" /> <input type="checkbox" onclick="myFunction()"> Show Password
+    <br />
+    Ngày sinh:<input type="date" name="birthday" id="birthday" value="" />
+    <br />
+    Giới tính:<select name="gender" id="gender">
+        <option value="male">Nam</option>
+        <option value="female">Nữ</option>
+        <option value="undefined">Tạm thời chưa chọn</option>
+    </select>
+    <br />
+    <button id="login">Đăng kí</button>
+    <button id="test class="btn btn-primary nut">Confirm</button>
+    <button id="test1">Test</button>
+</body>
+</html>

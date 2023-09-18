@@ -5,9 +5,7 @@ VisualStudioVersion = 17.6.33927.249
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CongNgheDotNet", "CongNgheDotNet.csproj", "{4B6BCA97-0D40-45E0-BF3D-63A787A005FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathTool", "..\MathTool\MathTool.csproj", "{5E68C5A0-82F1-4B16-8E08-B52C644AF977}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SrORy", "SrORy\SrORy.csproj", "{1CF6BD1B-8105-40B3-9F83-201A88EC61A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StORy", "SrORy\StORy.csproj", "{1CF6BD1B-8105-40B3-9F83-201A88EC61A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +17,6 @@ Global
 		{4B6BCA97-0D40-45E0-BF3D-63A787A005FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B6BCA97-0D40-45E0-BF3D-63A787A005FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B6BCA97-0D40-45E0-BF3D-63A787A005FD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5E68C5A0-82F1-4B16-8E08-B52C644AF977}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5E68C5A0-82F1-4B16-8E08-B52C644AF977}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5E68C5A0-82F1-4B16-8E08-B52C644AF977}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5E68C5A0-82F1-4B16-8E08-B52C644AF977}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1CF6BD1B-8105-40B3-9F83-201A88EC61A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1CF6BD1B-8105-40B3-9F83-201A88EC61A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CF6BD1B-8105-40B3-9F83-201A88EC61A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
