@@ -21,13 +21,20 @@ namespace SrORy
             {
                 case "them_user":
                     them_user();
-                    break;               
+                    break;
+                case "dangnhap":
+                    dangnhap();
+                    break;
+                case "quen_mk":
+                    quen_mk();
+                    break;
             }
         }
 
         const string cnStr = @"Data Source=STORMER;Initial Catalog=Story;Integrated Security=True";
-        class User
+        class User : Data_them_user
         {
+            public int id;
             public string name_user,email_user,password_user, birthday, gender;
         }
         class Data_them_user
@@ -37,15 +44,15 @@ namespace SrORy
         }
         void them_user()
         {
-            Data_them_user R = new Data_them_user();
+            //Data_them_user R = new Data_them_user();
+            User k = new User();
             try
             {
                 //lấy 4 thông số gửi lên
                 //gọi sql để thêm kh mới này
                 //nếu ok thì gửi về ok=1
                 //ngược lại ok=0 kèm error=báo lỗi chi tiết
-
-                User k = new User();
+              
                 k.name_user = Request["name_user"];
                 k.email_user = Request["email_user"];
                 k.password_user = Request["password_user"];
@@ -56,7 +63,7 @@ namespace SrORy
 
                 SqlConnection cn = new SqlConnection(cnStr);
                 cn.Open();
-                string sql = "SP_user";
+                string sql = "SP_User";
                 SqlCommand cm = new SqlCommand(sql, cn);
                 cm.CommandType = CommandType.StoredProcedure;
                 cm.Parameters.Add("@action", SqlDbType.NVarChar, 50).Value = "them_user";
@@ -72,13 +79,13 @@ namespace SrORy
                 if (n > 0)
                 {
                     //thêm đc 1 bản ghi thành công thì n==1
-                    R.ok = true;
+                    k.ok = true;
                 }
                 else
                 {
                     //n<=0 là sai rồi
-                    R.ok = false;
-                    R.error = "Lỗi gì đó nên ko thêm được";
+                    k.ok = false;
+                    k.error = "Lỗi gì đó nên ko thêm được";
                 }
                 cm.Dispose(); //giải phóng tài nguyên thực thi sql
                 cn.Close();   //đóng kết nối
@@ -87,13 +94,69 @@ namespace SrORy
             catch (Exception ex)
             {
                 //bẫy được lỗi -> gán vào thuộc tính error
-                R.ok = false;
-                R.error = ex.Message;
+                k.ok = false;
+                k.error = ex.Message;
             }
             //chuyển đối tượng R -> json text
-            string json = JsonConvert.SerializeObject(R);
+            string json = JsonConvert.SerializeObject(k);
             //gửi json text về trình duyệt
             this.Response.Write(json);
+        }
+
+        void dangnhap()
+        {
+            User k = new User();
+            try
+            {
+                SqlConnection cn = new SqlConnection(cnStr);
+                cn.Open();
+                string sql = "SP_User";
+                SqlCommand cm = new SqlCommand(sql, cn);
+                cm.CommandType = CommandType.StoredProcedure;
+                cm.Parameters.Add("@action", SqlDbType.NVarChar, 50).Value = "dangnhap";
+                cm.Parameters.Add("@email_user", SqlDbType.NVarChar, 50).Value = Request["email_user"];
+                cm.Parameters.Add("@password_user", SqlDbType.NVarChar, 50).Value = Request["password_user"];
+
+                SqlDataReader dr = cm.ExecuteReader();
+               
+                if (dr.HasRows)
+                {
+                    k.ok = true;
+                    DataTable dt = new DataTable();
+                    dt.Load(dr);                    
+                    DataRow r = dt.Rows[0];                  
+                    k.id = (int)r["id"];
+                    k.name_user = r["name_user"].ToString();
+                    k.email_user = r["email_user"].ToString();
+                    k.password_user = r["password_user"].ToString();
+                    k.birthday = r["birthday"].ToString();
+                    k.gender = r["gender"].ToString();
+                }
+                else
+                {
+                    k.ok = false;
+                    k.error = "Lỗi đăng nhập";
+                }
+
+                cm.Dispose(); //giải phóng tài nguyên thực thi sql
+                cn.Close();   //đóng kết nối
+                cn.Dispose(); //giải phóng tài nguyên kết nối db               
+                dr.Close();
+            }
+            catch (Exception ex)
+            {
+                k.ok = false;
+                k.error = ex.Message;
+
+            }
+            string json = JsonConvert.SerializeObject(k);
+            //gửi json text về trình duyệt
+            this.Response.Write(json);
+        }
+
+        void quen_mk()
+        {
+
         }
     }
 }
