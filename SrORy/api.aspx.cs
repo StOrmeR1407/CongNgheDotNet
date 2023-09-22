@@ -1,12 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+using System.Linq.Expressions;
+using System.Net.Mail;
+using System.Reflection.Emit;
+
 
 namespace SrORy
 {
@@ -32,12 +31,12 @@ namespace SrORy
         }
 
         const string cnStr = @"Data Source=STORMER;Initial Catalog=Story;Integrated Security=True";
-        class User : Data_them_user
+        class User : Status_user
         {
             public int id;
             public string name_user,email_user,password_user, birthday, gender;
         }
-        class Data_them_user
+        class Status_user
         {
             public bool ok; //true/false => báo thêm thành công hay ko
             public string error; //nếu có lỗi thì chi tiết báo lỗi ở đây
@@ -156,7 +155,93 @@ namespace SrORy
 
         void quen_mk()
         {
+            string sub_action = Request["sub_action"];
+            Status_user status = new Status_user();
+            try
+            {
+                switch (sub_action)
+                {
+                    case "gui_otp":
+                        {
+                            String random = new Random().Next(0, 1000000).ToString("D6");
 
+                            // Cho otp vào sql nèo
+                            SqlConnection cn = new SqlConnection(cnStr);
+                            cn.Open();
+                            string sql = "SP_User";
+                            SqlCommand cm = new SqlCommand(sql, cn);
+                            cm.CommandType = CommandType.StoredProcedure;
+                            cm.Parameters.Add("@action", SqlDbType.NVarChar, 50).Value = "nhan_otp";
+                            cm.Parameters.Add("@email_user", SqlDbType.NVarChar, 50).Value = Request["email_user"];
+                            cm.Parameters.Add("@otp", SqlDbType.VarChar, 6).Value = random;
+
+                            int n = cm.ExecuteNonQuery();
+                            if (n == 1)
+                            {                                
+                                status.ok = true;
+                            }
+                            else
+                            {                                
+                                status.ok = false;
+                                status.error = "Lỗi gì đó nên ko thêm được";
+                            }
+                            cm.Dispose(); 
+                            cn.Close();   
+                            cn.Dispose();
+
+                            MailMessage mail = new MailMessage();
+                            mail.To.Add(Request["email_user"]);
+                            mail.From = new MailAddress("tranhocpro2@gmail.com");
+                            mail.Subject = "Password Reset E-mail";
+
+                            mail.Body = "<h1> Reset Password </h1>" +
+                                "<p> This is code reset password for you: </p>" +
+                                $"<p style='font-weight: bold;'> {random} </p>";
+                            mail.IsBodyHtml = true;
+
+                            SmtpClient smtp = new SmtpClient();
+                            smtp.Port = 587;
+                            smtp.EnableSsl = true;
+                            smtp.UseDefaultCredentials = false;
+                            smtp.Host = "smtp.gmail.com";
+                            smtp.Credentials = new System.Net.NetworkCredential("tranhocpro2@gmail.com", "vwiq lscg zpyl ujjy");
+                            smtp.Send(mail);
+                           
+                            break;
+                        }
+                    case "xacnhan_otp":
+                        {
+                            break;
+                        }
+                    case "doi_mk":
+                        {
+                            break;
+                        }
+                }
+                    
+            }
+            
+
+            //String otp = Request["otp"];
+            //if (otp != null && random == otp)
+            //{
+            //    a.ok = true;
+            //}
+            //else
+            //{
+            //    a.ok = false;
+            //    a.error = "Sai OTP";
+            //}
+            
+            //String json2 = JsonConvert.SerializeObject(a);
+            //this.Response.Write(json2);
+
+            catch(Exception ex) {
+                status.ok = false;
+                status.error = ex.Message;
+            }
+            String json2 = JsonConvert.SerializeObject(status);
+            this.Response.Write(json2);
         }
     }
 }

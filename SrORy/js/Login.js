@@ -46,7 +46,7 @@
     });
 
 
-    $('#test').on('click', function () {
+    $('#signup').on('click', function () {
         $.confirm({
             type: 'blue',
             typeAnimated: true,
@@ -106,7 +106,7 @@
                 },
             },
             onContentReady: function () {
-                $('#name_user').focus();
+
             }
         });
     });
@@ -124,4 +124,104 @@
         myFunction();
     });
 
+    $('#forget-pw').on('click', function () {
+        $.confirm({
+            title: 'Quên mật khẩu',
+            content: '' +
+                '<div class="form-group">' +
+                '<label>Nhập email mà bạn muốn khôi phục mật khẩu</label>' +
+                '<input type="text" placeholder="Your email" class="name form-control" id="email_user_quenmk"required />' +
+                '</div>',
+            buttons: {
+                formSubmit: {
+                    text: 'Xác nhận',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        var email_user_quenmk = $('#email_user_quenmk').val();
+                        var send_data = {
+                            action: 'quen_mk',
+                            sub_action: 'gui_otp',
+                            email_user: email_user_quenmk,                           
+                        }
+
+                        $.post("api.aspx",
+                            send_data,
+                            function (data) {
+                                var result = JSON.parse(data);
+                                if (result.ok) {
+                                    $.confirm({
+                                        title: 'Xác nhận mã OTP',
+                                        content: '' +
+                                            '<div class="form-group">' +
+                                            '<label>Nhập 6 chữ số đã được gửi tới email của bạn </label>' +
+                                            '<input type="text" placeholder="OTP" class="name form-control" id="otp" required />' +
+                                            '</div>',
+                                        buttons: {
+                                            formSubmit: {
+                                                text: 'Xác nhận',
+                                                btnClass: 'btn-blue',
+                                                action: function () {
+                                                    var send_data = {
+                                                        action: 'quen_mk',
+                                                        sub_action: 'xacnhan_otp',
+                                                        email_user: email_user_quenmk,
+                                                        otp: $('#otp').val(),
+                                                    }
+
+                                                    $.post("api.aspx",
+                                                        send_data,
+                                                        function (data, status) {
+                                                            $.alert("Data: " + data + "\nStatus: " + status);
+                                                        });
+                                                }
+                                            },
+                                            cancel: function () {
+
+                                            }
+                                        }
+                                    });    
+                                }
+                            });
+
+                        //$.confirm({
+                        //    title: 'Xác nhận mã OTP',
+                        //    content: '' +
+                        //        '<div class="form-group">' +
+                        //        '<label>Nhập 6 chữ số đã được gửi tới email của bạn </label>' +
+                        //        '<input type="text" placeholder="OTP" class="name form-control" id="otp" required />' +
+                        //        '</div>',
+                        //    buttons: {
+                        //        formSubmit: {
+                        //            text: 'Xác nhận',
+                        //            btnClass: 'btn-blue',
+                        //            action: function () {
+                        //                var send_data = {
+                        //                    action: 'quen_mk',
+                        //                    email_user: $('#email_user_quenmk').val(),
+                        //                    otp: $('#otp').val(),
+                        //                }
+
+                        //                $.post("api.aspx",
+                        //                    send_data,
+                        //                    function (data, status) {
+                        //                        $.alert("Data: " + data + "\nStatus: " + status);
+                        //                    });
+                        //            }
+                        //        },
+                        //        cancel: function () {
+
+                        //        }
+                        //    }
+                        //});    
+                    }
+                },
+                cancel: function () {     
+                    
+                },
+            },
+            onContentReady: function () {
+               
+            }
+        });
+    });
 });
