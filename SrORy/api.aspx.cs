@@ -211,30 +211,52 @@ namespace SrORy
                         }
                     case "xacnhan_otp":
                         {
+                            SqlConnection cn = new SqlConnection(cnStr);
+                            cn.Open();
+                            string sql = "SP_User";
+                            SqlCommand cm = new SqlCommand(sql, cn);
+                            cm.CommandType = CommandType.StoredProcedure;
+                            cm.Parameters.Add("@action", SqlDbType.NVarChar, 50).Value = "xacnhan_otp";
+                            cm.Parameters.Add("@email_user", SqlDbType.NVarChar, 50).Value = Request["email_user"];
+                            cm.Parameters.Add("@otp", SqlDbType.VarChar, 6).Value = Request["otp"];
+                            SqlDataReader dr = cm.ExecuteReader();
+                            if (dr.HasRows)
+                            {
+                                status.ok = true;
+                            }
+                            else
+                            {
+                                status.ok = false;
+                                status.error = "Sai OTP là cái chắc";
+                            }
                             break;
                         }
-                    case "doi_mk":
+                    case "doimk_user":
                         {
+                            SqlConnection cn = new SqlConnection(cnStr);
+                            cn.Open();
+                            string sql = "SP_User";
+                            SqlCommand cm = new SqlCommand(sql, cn);
+                            cm.CommandType = CommandType.StoredProcedure;
+                            cm.Parameters.Add("@action", SqlDbType.NVarChar, 50).Value = "doimk_user";
+                            cm.Parameters.Add("@email_user", SqlDbType.NVarChar, 50).Value = Request["email_user"];
+                            cm.Parameters.Add("@password_user", SqlDbType.NVarChar, 50).Value = Request["password_user"];
+                            int dr = cm.ExecuteNonQuery();
+                            if (dr == 1)
+                            {
+                                status.ok = true;
+                            }
+                            else
+                            {
+                                status.ok = false;
+                                status.error = "Lỗi đổi mật khẩu";
+                            }
                             break;
                         }
                 }
                     
             }
-            
 
-            //String otp = Request["otp"];
-            //if (otp != null && random == otp)
-            //{
-            //    a.ok = true;
-            //}
-            //else
-            //{
-            //    a.ok = false;
-            //    a.error = "Sai OTP";
-            //}
-            
-            //String json2 = JsonConvert.SerializeObject(a);
-            //this.Response.Write(json2);
 
             catch(Exception ex) {
                 status.ok = false;

@@ -125,12 +125,13 @@
     });
 
     $('#forget-pw').on('click', function () {
-        $.confirm({
+        var email_dialog = $.confirm({
             title: 'Quên mật khẩu',
             content: '' +
                 '<div class="form-group">' +
                 '<label>Nhập email mà bạn muốn khôi phục mật khẩu</label>' +
                 '<input type="text" placeholder="Your email" class="name form-control" id="email_user_quenmk"required />' +
+                '<div id="show_error_email"></div>' +
                 '</div>',
             buttons: {
                 formSubmit: {
@@ -138,30 +139,31 @@
                     btnClass: 'btn-blue',
                     action: function () {
                         var email_user_quenmk = $('#email_user_quenmk').val();
-                        var send_data = {
+                        var send_data_mail = {
                             action: 'quen_mk',
                             sub_action: 'gui_otp',
                             email_user: email_user_quenmk,                           
                         }
 
                         $.post("api.aspx",
-                            send_data,
+                            send_data_mail,
                             function (data) {
-                                var result = JSON.parse(data);
-                                if (result.ok) {
-                                    $.confirm({
+                                var result_mail = JSON.parse(data);
+                                if (result_mail.ok) {
+                                    var otp_dialog = $.confirm({
                                         title: 'Xác nhận mã OTP',
                                         content: '' +
                                             '<div class="form-group">' +
                                             '<label>Nhập 6 chữ số đã được gửi tới email của bạn </label>' +
                                             '<input type="text" placeholder="OTP" class="name form-control" id="otp" required />' +
+                                            '<div id="show_error_otp"></div>' +
                                             '</div>',
                                         buttons: {
                                             formSubmit: {
                                                 text: 'Xác nhận',
                                                 btnClass: 'btn-blue',
                                                 action: function () {
-                                                    var send_data = {
+                                                    var send_data_otp = {
                                                         action: 'quen_mk',
                                                         sub_action: 'xacnhan_otp',
                                                         email_user: email_user_quenmk,
@@ -169,9 +171,64 @@
                                                     }
 
                                                     $.post("api.aspx",
-                                                        send_data,
-                                                        function (data, status) {
-                                                            $.alert("Data: " + data + "\nStatus: " + status);
+                                                        send_data_otp,
+                                                        function (data) {
+                                                            var result_otp = JSON.parse(data);
+                                                            if (result_otp.ok) {
+                                                                var repassword_dialog = $.confirm({
+                                                                    title: 'Xác nhận mật khẩu mới',
+                                                                    content: '' +
+                                                                        '<div class="form-group">' +
+                                                                        '<label>Nhập mật khẩu mới của bạn </label>' +
+                                                                        '<input type="text" placeholder="Nhập mật khẩu mới" class="name form-control" id="repassword1" required />' +
+                                                                        '<input type="text" placeholder="Xác nhận mật khẩu mới" class="name form-control" id="repassword2" required />' +
+                                                                        
+                                                                        '</div>',
+                                                                    buttons: {
+                                                                        formSubmit: {
+                                                                            text: 'Xác nhận',
+                                                                            btnClass: 'btn-blue',
+                                                                            action: function () {
+                                                                                if ($('#repassword2').val() != $('#repassword1').val()) {
+                                                                                    $.alert("Phần xác nhận mật khẩu không trùng khớp");                                                                                    
+                                                                                }
+                                                                                else {
+                                                                                    var send_data_rpw = {
+                                                                                        action: 'quen_mk',
+                                                                                        sub_action: 'doimk_user',
+                                                                                        email_user: email_user_quenmk,
+                                                                                        password_user: $('#repassword2').val(),
+                                                                                    }
+
+                                                                                    $.post("api.aspx",
+                                                                                        send_data_rpw,
+                                                                                        function (data) {
+                                                                                            var result_rpw = JSON.parse(data);
+                                                                                            if (result_rpw.ok) {
+                                                                                                $.alert("Mật khẩu đã thay đổi thành công");
+                                                                                                repassword_dialog.close();
+                                                                                            }
+                                                                                            else {
+                                                                                                $.alert("Lỗi đổi mật khẩu");
+                                                                                                //$('#show_error_mk').html(result_rpw.error);
+                                                                                                //$('#show_error_mk').css("color", "red");
+                                                                                            }
+                                                                                        });
+                                                                                }
+                                                                                return false;                                                                             
+                                                                            }
+                                                                        },
+                                                                        cancel: function () {
+
+                                                                        }
+                                                                    }
+                                                                });
+                                                            }
+                                                            else {                                                               
+                                                                otp_dialog.open();
+                                                                $('#show_error_otp').html(result_otp.error);
+                                                                $('#show_error_otp').css("color", "red");
+                                                            }
                                                         });
                                                 }
                                             },
@@ -179,40 +236,15 @@
 
                                             }
                                         }
-                                    });    
+                                    });
+                                }
+                                else {
+                                    email_dialog.open();
+                                    $('#show_error_email').html(result_mail.error);
+                                    $('#show_error_email').css("color", "red");
                                 }
                             });
-
-                        //$.confirm({
-                        //    title: 'Xác nhận mã OTP',
-                        //    content: '' +
-                        //        '<div class="form-group">' +
-                        //        '<label>Nhập 6 chữ số đã được gửi tới email của bạn </label>' +
-                        //        '<input type="text" placeholder="OTP" class="name form-control" id="otp" required />' +
-                        //        '</div>',
-                        //    buttons: {
-                        //        formSubmit: {
-                        //            text: 'Xác nhận',
-                        //            btnClass: 'btn-blue',
-                        //            action: function () {
-                        //                var send_data = {
-                        //                    action: 'quen_mk',
-                        //                    email_user: $('#email_user_quenmk').val(),
-                        //                    otp: $('#otp').val(),
-                        //                }
-
-                        //                $.post("api.aspx",
-                        //                    send_data,
-                        //                    function (data, status) {
-                        //                        $.alert("Data: " + data + "\nStatus: " + status);
-                        //                    });
-                        //            }
-                        //        },
-                        //        cancel: function () {
-
-                        //        }
-                        //    }
-                        //});    
+                       
                     }
                 },
                 cancel: function () {     
