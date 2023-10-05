@@ -19,12 +19,4 @@
 ===========`-.`___`-.__\ \___  /__.-'_.'_.-'================
                         `=--=-'                    hjw
 
-Để thêm web form: Chuột trái project -> add - > web form
-
-Get input from web UI
-VD double A = Double.Parse(Textbox1.Text)
-
-set up iis
-tìm kiếm iis manager
-Chuột phải vào máy -> add website
 
