@@ -2,6 +2,7 @@
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Net.Mail;
 using System.Reflection.Emit;
@@ -26,6 +27,9 @@ namespace SrORy
                     break;
                 case "quen_mk":
                     quen_mk();
+                    break;
+                case "playmp3":
+                    GetFileMp3();
                     break;
             }
         }
@@ -265,6 +269,39 @@ namespace SrORy
             }
             String json2 = JsonConvert.SerializeObject(status);
             this.Response.Write(json2);
+        }
+
+        void GetFileMp3()
+        {
+            string a = Request["text"];
+            string line = "";
+            try
+            {
+                ProcessStartInfo startInfo = new ProcessStartInfo()
+                {
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = @"E:\Python\venv\Scripts\python.exe",  
+                    Arguments = $" E:\\Python\\gen_voice.py \"{a}\" ", 
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true,
+                    UseShellExecute = false
+                };
+
+                Process p = Process.Start(startInfo);
+                p.WaitForExit();
+                
+                while (!p.StandardOutput.EndOfStream)
+                {
+                    line = p.StandardOutput.ReadLine();                                       
+                }
+                
+            }
+            catch(Exception ex)
+            {
+                line = ex.Message;
+            }
+
+            this.Response.Write(line);
         }
     }
 }
