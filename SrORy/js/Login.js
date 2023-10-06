@@ -256,4 +256,13 @@
             }
         });
     });
+
+    $('#playmp3').on('click', function () {
+        $.post("api.aspx",
+            { action: 'playmp3', text: $('#tts').val()},
+            function (audio_fn) {
+                var audio = new Audio('mp3/' + audio_fn);
+                audio.play();
+            });
+    });
 });
