@@ -265,4 +265,20 @@
                 audio.play();
             });
     });
+
+    $('#check_gmail').on('click', function () {
+        $.post("api.aspx",
+            { action: 'check_gmail', gmail: $('#gmail').val() },
+            function (data) {
+                alert(data);
+            });
+    });
+
+    $('#tcp_client').on('click', function () {
+        $.post("api.aspx",
+            { action: 'tcp_client', dns_gmail: $('#dns_gmail').val() },
+            function (data) {
+                $.alert(data);
+            });
+    });
 });
