@@ -3,9 +3,13 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.IO;
 using System.Linq.Expressions;
 using System.Net.Mail;
+using System.Net.Sockets;
 using System.Reflection.Emit;
+using System.Text;
+using System.Web.UI.WebControls;
 
 
 namespace SrORy
@@ -31,8 +35,14 @@ namespace SrORy
                 case "playmp3":
                     GetFileMp3();
                     break;
+                case "check_gmail":
+                    check_gmail();
+                    break;
+                case "tcp_client":
+                    tcp_client();
+                    break;
             }
-        }
+        }        
 
         const string cnStr = @"Data Source=STORMER;Initial Catalog=Story;Integrated Security=True";
         class User : Status_user
@@ -211,7 +221,7 @@ namespace SrORy
                             smtp.Host = "smtp.gmail.com";
                             smtp.Credentials = new System.Net.NetworkCredential("tranhocpro2@gmail.com", "vwiq lscg zpyl ujjy");
                             smtp.Send(mail);
-                           
+
                             break;
                         }
                     case "xacnhan_otp":
@@ -297,6 +307,85 @@ namespace SrORy
                 
             }
             catch(Exception ex)
+            {
+                line = ex.Message;
+            }
+
+            this.Response.Write(line);
+        }
+
+        void check_gmail()
+        {
+            string ResponseString;
+            try
+            {
+                TcpClient tClient = new TcpClient("gmail-smtp-in.l.google.com", 25);
+                string CRLF = "\r\n";
+                byte[] dataBuffer;
+                
+                NetworkStream netStream = tClient.GetStream();
+                StreamReader reader = new StreamReader(netStream);
+                reader.ReadLine();
+
+                // Perform HELO to SMTP Server and get Response 
+                dataBuffer = BytesFromString("HELO KirtanHere" + CRLF);
+                netStream.Write(dataBuffer, 0, dataBuffer.Length);
+                reader.ReadLine();
+
+                dataBuffer = BytesFromString("MAIL FROM:<" + Request["gmail"] + ">" + CRLF);
+                netStream.Write(dataBuffer, 0, dataBuffer.Length);
+                ResponseString = reader.ReadLine();
+
+                
+                //dataBuffer = BytesFromString("QUITE" + CRLF);
+                //netStream.Write(dataBuffer, 0, dataBuffer.Length);
+                tClient.Close();
+            }
+            catch(Exception ex)
+            {
+                ResponseString = ex.Message;
+            }
+
+            this.Response.Write(ResponseString);
+        }
+
+        private byte[] BytesFromString(string str)
+        {
+            return Encoding.ASCII.GetBytes(str);
+        }
+
+        private int GetResponseCode(string ResponseString)
+        {
+            return int.Parse(ResponseString.Substring(0, 3));
+        }
+
+        void tcp_client()
+        {
+            string a = Request["dns_gmail"];
+            string line = "";
+            try
+            {
+                // -- Thông tin tiến trình
+                ProcessStartInfo startInfo = new ProcessStartInfo()
+                {
+                    WindowStyle = ProcessWindowStyle.Hidden,    
+                    FileName = @"cmd.exe",
+                    Arguments = $"/c nslookup -type=MX {a}",
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true,
+                    UseShellExecute = false
+                };
+
+                Process p = Process.Start(startInfo);
+                p.WaitForExit();
+
+                while (!p.StandardOutput.EndOfStream)
+                {
+                    line = p.StandardOutput.ReadLine();
+                }
+
+            }
+            catch (Exception ex)
             {
                 line = ex.Message;
             }
