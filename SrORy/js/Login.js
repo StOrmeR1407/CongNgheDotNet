@@ -270,15 +270,22 @@
         $.post("api.aspx",
             { action: 'check_gmail', gmail: $('#gmail').val() },
             function (data) {
-                alert(data);
+                var x = JSON.parse(data);
+                if (x.ok == true) {
+                    $.dialog({
+                        title: 'Thành Công',
+                        content: 'Mail ' + $('#gmail').val() + ' có tồn tại!',
+                        type: 'green',
+                    });
+                }
+                else {
+                    $.dialog({
+                        title: 'Thất bại',
+                        content: x.error,
+                        type: 'red',
+                    });
+                }
             });
     });
 
-    $('#tcp_client').on('click', function () {
-        $.post("api.aspx",
-            { action: 'tcp_client', dns_gmail: $('#dns_gmail').val() },
-            function (data) {
-                $.alert(data);
-            });
-    });
 });
