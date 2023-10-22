@@ -100,7 +100,6 @@
     <Content Include="vendor\bootstrap\js\tooltip.js" />
     <Content Include="vendor\css-hamburgers\hamburgers.css" />
     <Content Include="vendor\css-hamburgers\hamburgers.min.css" />
-    <Content Include="vendor\jquery\jquery-3.2.1.min.js" />
     <Content Include="vendor\jquery\jquery-confirm.css" />
     <Content Include="vendor\jquery\jquery-confirm.js" />
     <Content Include="vendor\jquery\jquery.min.js" />

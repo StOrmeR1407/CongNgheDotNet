@@ -39,10 +39,13 @@ namespace SrORy
                 case "check_gmail":
                     check_gmail();
                     break;
+                case "check_connect":
+                    check_connect();
+                    break;
             }
         }        
 
-        const string cnStr = @"Data Source=STORMER;Initial Catalog=Story;Integrated Security=True";
+        const string cnStr = @"Server=STORMER;Database=Story;User id=hocdepzai;Password=hocdepzai";
         class User : Status_Reply
         {
             public int id;
@@ -408,5 +411,20 @@ namespace SrORy
             return line;
         }
 
+        void check_connect()
+        {
+            string result;
+            try
+            {
+                SqlConnection cn = new SqlConnection(cnStr);
+                cn.Open();
+                result = "true";
+            }
+            catch (SqlException)
+            {
+                result = "fasle";
+            }
+            Response.Write(result);
+        }
     }
 }

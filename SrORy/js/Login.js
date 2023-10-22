@@ -288,4 +288,11 @@
             });
     });
 
+    $('#check_connect').on('click', function () {
+        $.post("api.aspx",
+            { action: 'check_connect'},
+            function (data) {
+                $.alert(data);
+            });
+    });
 });
