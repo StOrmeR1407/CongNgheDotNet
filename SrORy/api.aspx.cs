@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq.Expressions;
+using System.Net;
 using System.Net.Mail;
 using System.Net.Sockets;
 using System.Reflection.Emit;
@@ -38,19 +39,19 @@ namespace SrORy
                 case "check_gmail":
                     check_gmail();
                     break;
-                case "tcp_client":
-                    tcp_client();
+                case "check_connect":
+                    check_connect();
                     break;
             }
         }        
 
-        const string cnStr = @"Data Source=STORMER;Initial Catalog=Story;Integrated Security=True";
-        class User : Status_user
+        const string cnStr = @"Server=STORMER;Database=Story;User id=hocdepzai;Password=hocdepzai";
+        class User : Status_Reply
         {
             public int id;
             public string name_user,email_user,password_user, birthday, gender;
         }
-        class Status_user
+        class Status_Reply
         {
             public bool ok; //true/false => báo thêm thành công hay ko
             public string error; //nếu có lỗi thì chi tiết báo lỗi ở đây
@@ -171,7 +172,7 @@ namespace SrORy
         void quen_mk()
         {
             string sub_action = Request["sub_action"];
-            Status_user status = new Status_user();
+            Status_Reply status = new Status_Reply();
             try
             {
                 switch (sub_action)
@@ -315,53 +316,67 @@ namespace SrORy
         }
 
         void check_gmail()
-        {
-            string ResponseString;
+        {           
+            string mail = Request["gmail"];
+            int StatusCode;
+            Status_Reply status = new Status_Reply();
             try
             {
-                TcpClient tClient = new TcpClient("gmail-smtp-in.l.google.com", 25);
+                string ResponseString;
+                string domain = mail.Split('@')[1];
+                string mail_server = locate_mail_server(domain);
+                TcpClient tClient = new TcpClient(mail_server, 25);
                 string CRLF = "\r\n";
                 byte[] dataBuffer;
-                
+
                 NetworkStream netStream = tClient.GetStream();
                 StreamReader reader = new StreamReader(netStream);
                 reader.ReadLine();
 
-                // Perform HELO to SMTP Server and get Response 
-                dataBuffer = BytesFromString("HELO KirtanHere" + CRLF);
+                //// Perform HELO to SMTP Server and get Response 
+                dataBuffer = BytesFromString("HELO TranHoc" + CRLF);
                 netStream.Write(dataBuffer, 0, dataBuffer.Length);
                 reader.ReadLine();
 
                 dataBuffer = BytesFromString("MAIL FROM:<" + Request["gmail"] + ">" + CRLF);
                 netStream.Write(dataBuffer, 0, dataBuffer.Length);
                 ResponseString = reader.ReadLine();
+                StatusCode = GetStatusCheckMail(ResponseString);
 
-                
-                //dataBuffer = BytesFromString("QUITE" + CRLF);
-                //netStream.Write(dataBuffer, 0, dataBuffer.Length);
+                if(StatusCode == 250)
+                {
+                    status.ok = true;
+                }
+                else
+                {
+                    status.ok = false;
+                    status.error = "Không tồn tại mail này";
+                }
+
                 tClient.Close();
+                
             }
             catch(Exception ex)
             {
-                ResponseString = ex.Message;
+                status.ok = false;
+                status.error = ex.Message;
             }
-
-            this.Response.Write(ResponseString);
+            string json = JsonConvert.SerializeObject(status);
+            this.Response.Write(json);
         }
 
         private byte[] BytesFromString(string str)
         {
             return Encoding.ASCII.GetBytes(str);
         }
-
-        private int GetResponseCode(string ResponseString)
+        
+        private int GetStatusCheckMail(string a)
         {
-            return int.Parse(ResponseString.Substring(0, 3));
+            return Int32.Parse(a.Substring(0, 3));
         }
 
-        void tcp_client()
+        string locate_mail_server(string domain)
         {
-            string a = Request["dns_gmail"];
             string line = "";
             try
             {
@@ -370,7 +385,7 @@ namespace SrORy
                 {
                     WindowStyle = ProcessWindowStyle.Hidden,    
                     FileName = @"cmd.exe",
-                    Arguments = $"/c nslookup -type=MX {a}",
+                    Arguments = $"/c nslookup -type=MX {domain}",
                     RedirectStandardOutput = true,
                     CreateNoWindow = true,
                     UseShellExecute = false
@@ -383,14 +398,33 @@ namespace SrORy
                 {
                     line = p.StandardOutput.ReadLine();
                 }
-
+                int index = line.IndexOf("exchanger");
+                line = line.Substring(index, line.Length - index);
+                line = line.Replace("exchanger = ", "");
+                
             }
             catch (Exception ex)
             {
                 line = ex.Message;
             }
 
-            this.Response.Write(line);
+            return line;
+        }
+
+        void check_connect()
+        {
+            string result;
+            try
+            {
+                SqlConnection cn = new SqlConnection(cnStr);
+                cn.Open();
+                result = "true";
+            }
+            catch (SqlException)
+            {
+                result = "fasle";
+            }
+            Response.Write(result);
         }
     }
 }

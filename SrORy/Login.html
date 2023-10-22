@@ -9,6 +9,9 @@
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <link href="vendor/jquery/jquery-confirm.css" rel="stylesheet" />
     <script src="vendor/jquery/jquery-confirm.js"></script>
+    <script src="
+https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js
+"></script>
 
 </head>
 <body>
@@ -23,10 +26,38 @@
     Nhập text để nói:<input type="text" id="tts">
     <button id="playmp3" class="btn btn-primary nut">Test mp3</button>
     <br />
-    Test gmail<input type="text" id="gmail" />
+    Check mail<input type="text" id="gmail" />
     <button id="check_gmail" class="btn btn-primary nut"> Check </button>
     <br />
-    Ckeck tcpclient<input type="text" id="dns_gmail" />
-    <button id="tcp_client" class="btn btn-primary nut"> Check </button>
+    <button id="check_connect" class="btn btn-primary nut"> Check connect </button>
+
+	<div>
+  <canvas id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [{
+        label: '# of Votes',
+        data: [12, 19, 3, 5, 2, 3],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
 </body>
 </html>
