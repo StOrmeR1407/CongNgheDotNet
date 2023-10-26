@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contact", "Contact.csproj",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StORy", "SrORy\StORy.csproj", "{1CF6BD1B-8105-40B3-9F83-201A88EC61A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store", "Store\Store.csproj", "{4F9DB561-E3CD-4CC7-A705-5A1C4D678E11}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Money", "Store\Money.csproj", "{4F9DB561-E3CD-4CC7-A705-5A1C4D678E11}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
