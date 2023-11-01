@@ -165,7 +165,7 @@ namespace SrORy
 
             }
             string json = JsonConvert.SerializeObject(k);
-            //gửi json text về trình duyệt
+
             this.Response.Write(json);
         }
 

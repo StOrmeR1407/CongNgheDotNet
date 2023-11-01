@@ -7,16 +7,16 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4F9DB561-E3CD-4CC7-A705-5A1C4D678E11}</ProjectGuid>
+    <ProjectGuid>{563E9DE0-897B-4594-9ADC-B053CAA4C113}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Store</RootNamespace>
-    <AssemblyName>Store</AssemblyName>
+    <RootNamespace>ThucHanh</RootNamespace>
+    <AssemblyName>ThucHanh</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort>44367</IISExpressSSLPort>
+    <IISExpressSSLPort>44358</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -44,9 +44,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -70,44 +67,33 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="API.aspx" />
+    <Content Include="api.aspx" />
     <Content Include="bootstrap\css\bootstrap-grid.css" />
     <Content Include="bootstrap\css\bootstrap-grid.min.css" />
-    <Content Include="bootstrap\css\bootstrap-grid.rtl.css" />
-    <Content Include="bootstrap\css\bootstrap-grid.rtl.min.css" />
     <Content Include="bootstrap\css\bootstrap-reboot.css" />
     <Content Include="bootstrap\css\bootstrap-reboot.min.css" />
-    <Content Include="bootstrap\css\bootstrap-reboot.rtl.css" />
-    <Content Include="bootstrap\css\bootstrap-reboot.rtl.min.css" />
-    <Content Include="bootstrap\css\bootstrap-utilities.css" />
-    <Content Include="bootstrap\css\bootstrap-utilities.min.css" />
-    <Content Include="bootstrap\css\bootstrap-utilities.rtl.css" />
-    <Content Include="bootstrap\css\bootstrap-utilities.rtl.min.css" />
     <Content Include="bootstrap\css\bootstrap.css" />
     <Content Include="bootstrap\css\bootstrap.min.css" />
-    <Content Include="bootstrap\css\bootstrap.rtl.css" />
-    <Content Include="bootstrap\css\bootstrap.rtl.min.css" />
-    <Content Include="bootstrap\js\bootstrap.bundle.js" />
     <Content Include="bootstrap\js\bootstrap.bundle.min.js" />
-    <Content Include="bootstrap\js\bootstrap.esm.js" />
-    <Content Include="bootstrap\js\bootstrap.esm.min.js" />
     <Content Include="bootstrap\js\bootstrap.js" />
     <Content Include="bootstrap\js\bootstrap.min.js" />
+    <Content Include="bootstrap\js\popper.js" />
+    <Content Include="bootstrap\js\popper.min.js" />
+    <Content Include="bootstrap\js\tooltip.js" />
     <Content Include="index.html" />
     <Content Include="jquery\jquery-confirm.css" />
     <Content Include="jquery\jquery-confirm.js" />
     <Content Include="jquery\jquery.min.js" />
-    <Content Include="script.js" />
-    <Content Include="style.css" />
+    <Content Include="mycode.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API.aspx.cs">
-      <DependentUpon>API.aspx</DependentUpon>
+    <Compile Include="api.aspx.cs">
+      <DependentUpon>api.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="API.aspx.designer.cs">
-      <DependentUpon>API.aspx</DependentUpon>
+    <Compile Include="api.aspx.designer.cs">
+      <DependentUpon>api.aspx</DependentUpon>
     </Compile>
     <Compile Include="AppSettingsGet.cs" />
     <Compile Include="LibDB.cs" />
@@ -116,26 +102,10 @@
   <ItemGroup>
     <Content Include="bootstrap\css\bootstrap-grid.css.map" />
     <Content Include="bootstrap\css\bootstrap-grid.min.css.map" />
-    <Content Include="bootstrap\css\bootstrap-grid.rtl.css.map" />
-    <Content Include="bootstrap\css\bootstrap-grid.rtl.min.css.map" />
     <Content Include="bootstrap\css\bootstrap-reboot.css.map" />
     <Content Include="bootstrap\css\bootstrap-reboot.min.css.map" />
-    <Content Include="bootstrap\css\bootstrap-reboot.rtl.css.map" />
-    <Content Include="bootstrap\css\bootstrap-reboot.rtl.min.css.map" />
-    <Content Include="bootstrap\css\bootstrap-utilities.css.map" />
-    <Content Include="bootstrap\css\bootstrap-utilities.min.css.map" />
-    <Content Include="bootstrap\css\bootstrap-utilities.rtl.css.map" />
-    <Content Include="bootstrap\css\bootstrap-utilities.rtl.min.css.map" />
     <Content Include="bootstrap\css\bootstrap.css.map" />
     <Content Include="bootstrap\css\bootstrap.min.css.map" />
-    <Content Include="bootstrap\css\bootstrap.rtl.css.map" />
-    <Content Include="bootstrap\css\bootstrap.rtl.min.css.map" />
-    <Content Include="bootstrap\js\bootstrap.bundle.js.map" />
-    <Content Include="bootstrap\js\bootstrap.bundle.min.js.map" />
-    <Content Include="bootstrap\js\bootstrap.esm.js.map" />
-    <Content Include="bootstrap\js\bootstrap.esm.min.js.map" />
-    <Content Include="bootstrap\js\bootstrap.js.map" />
-    <Content Include="bootstrap\js\bootstrap.min.js.map" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -157,9 +127,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>52968</DevelopmentServerPort>
+          <DevelopmentServerPort>51943</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44367/</IISUrl>
+          <IISUrl>https://localhost:44358/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
