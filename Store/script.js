@@ -21,7 +21,7 @@
                                 username : $('#username').val(),
                                 password : $('#password').val()
                             },
-                            function (data) {;
+                            function (data) {
                                 var j = JSON.parse(data);
                                 
                                 if (j.ok) {
@@ -43,6 +43,119 @@
             }
         });
     });
+
+    $('#signup').on('click', function () {
+        var dialog_login = $.confirm({
+            title: 'Đăng kí!',
+            content: `
+                <div class="form-floating mb-3 mt-3">
+                  <input type="text" class="form-control" id="name" placeholder="Enter name">
+                  <label>Name</label>
+                </div>
+
+                <div class="form-floating mb-3 mt-3">
+                  <input type="text" class="form-control" id="username" placeholder="Enter username">
+                  <label>Username</label>
+                </div>
+
+                <div class="form-floating mt-3 mb-3">
+                  <input type="text" class="form-control" id="password" placeholder="Enter password">
+                  <label >Password</label>
+                </div>
+
+                <div class="form-floating mt-3 mb-3">
+                  <input type="text" class="form-control" id="emaill" placeholder="Enter email">
+                  <label >Email</label>
+                </div>
+            `
+            ,
+            buttons: {
+                formSubmit: {
+                    text: 'Submit',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        $.post("API.aspx",
+                            {
+                                action: 'signup',
+                                name: $('#name').val(),
+                                username: $('#username').val(),
+                                password: $('#password').val(),   
+                                email: $('#emaill').val(),
+                            },
+                            function (data) {
+                                var j = JSON.parse(data);
+                                if (j.ok) {
+                                    $.alert("Đăng kí thành công");
+                                    dialog_login.close();
+                                }
+                                else {
+                                    $.alert("Đăng kí thất bại");
+                                    return false;
+                                }
+                            });
+                    }
+                },
+                cancel: function () {
+                    //close
+                },
+            },
+            onContentReady: function () {
+
+            }
+        });
+    });
+
+    $('#modify').on('click', function () {
+        var dialog_login = $.confirm({
+            title: 'Sửa đổi!',
+            content: `
+                <div class="form-floating mb-3 mt-3">
+                  <input type="text" class="form-control" id="name" placeholder="Enter name">
+                  <label>Name</label>
+                </div>
+
+                <div class="form-floating mt-3 mb-3">
+                  <input type="text" class="form-control" id="emaill" placeholder="Enter email">
+                  <label >Email</label>
+                </div>
+            `
+            ,
+            buttons: {
+                formSubmit: {
+                    text: 'Submit',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        $.post("API.aspx",
+                            {
+                                action: 'modify',
+                                id: 7,
+                                name: $('#name').val(),
+                                email: $('#emaill').val(),   
+                            },
+                            function (data) {
+                                var j = JSON.parse(data);
+                                if (j.ok) {
+                                    $.alert("Sửa đổi thành công");
+                                    dialog_login.close();
+                                }
+                                else {
+                                    $.alert("Sửa đổi thất bại: " + j.msg); 
+                                }
+                            }
+                        );
+                        return false;
+                    }
+                },
+                cancel: function () {
+                    //close
+                },
+            },
+            onContentReady: function () {
+
+            }
+        });
+    });
+
 });
 
 function openCity(evt, cityName) {
