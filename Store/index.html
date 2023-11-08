@@ -10,6 +10,9 @@
     <script src="bootstrap/js/bootstrap.bundle.js"></script>
     <link href="style.css" rel="stylesheet" />
     <script src="script.js"></script>
+    <link href="tablesorter-master/dist/css/theme.default.min.css" rel="stylesheet" />
+    <script src="tablesorter-master/dist/js/jquery.tablesorter.js"></script>
+    <script src="tablesorter-master/dist/js/jquery.tablesorter.widgets.js"></script>
 </head>
 <body>
     <!-- Tab links -->
@@ -18,22 +21,44 @@
         <p>Tiền của bạn cũng là tiền của chúng tôi</p>
     </div>
     <div class="tab">
-        <button class="tablinks" onclick="openCity(event, 'Home')">London</button>
-        <button class="tablinks" onclick="openCity(event, 'Income')">Paris</button>
-        <button class="tablinks" onclick="openCity(event, 'Expense')">Tokyo</button>
+        <button class="tablinks" onclick="openCity(event, 'Home')">Home</button>
+        <button class="tablinks" onclick="openCity(event, 'Income')">Nguồn Thu</button>
+        <button class="tablinks" onclick="openCity(event, 'Expense')">Khoản Chi</button>
         <button style="float:right" id="login" class="tablinks">Log in</button>
         <button style="float:right" id="signup" class="tablinks">Sign up</button>
         <button style="float:right" id="modify" class="tablinks">Modify</button>
     </div>
 
     <!-- Tab content -->
-    <div id="Home" class="tabcontent">
-        
+    <div id="Income" class="tabcontent">
+        <button class="btn btn-primary" id="addNew">Thêm mới</button>
+        <table id="thu" class="tablesorter">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Nguồn Thu</th>
+                    <th>Loại</th>
+                    <th>Số Tiền</th>
+                    <th>Thời Gian</th>
+                    <th>Sửa/xóa</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Bốc bát họ</td>
+                    <td>vay</td>
+                    <td>$50.00</td>
+                    <td>22-12-20023</td>
+                    <td>
+                        <button class="edit-btn btn btn-sm btn-warning" data-action="edit_user">Sửa</button>
+                        <button class="delete-btn btn btn-sm btn-danger" data-action="delete_user">Xóa</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
-    <div id="Income" class="tabcontent">
-        
-    </div>
 
     <div id="Expense" class="tabcontent">
         

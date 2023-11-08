@@ -155,6 +155,96 @@
             }
         });
     });
+    $("#thu").tablesorter();
+    $('#thu').on('click', '.edit-btn', function () {
+        var nguonThu = $(this).closest('tr').find('td:eq(1)').text();
+        var loai = $(this).closest('tr').find('td:eq(2)').text();
+        var soTien = $(this).closest('tr').find('td:eq(3)').text();
+        var thoiGian = $(this).closest('tr').find('td:eq(4)').text();
+
+        $.confirm({
+            title: 'Chỉnh Sửa Nguồn Thu',
+            content: '' +
+                '<form action="" class="formName">' +
+                '<div class="form-group">' +
+                '<label>Nguồn Thu:</label>' +
+                '<input type="text" class="form-control" value="' + nguonThu + '" required />' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<label>Loại:</label>' +
+                '<input type="text" class="form-control" value="' + loai + '" required />' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<label>Số Tiền:</label>' +
+                '<input type="text" class="form-control" value="' + soTien + '" required />' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<label>Thời Gian:</label>' +
+                '<input type="date" class="form-control" value="' + thoiGian + '" required />' +
+                '</div>' +
+                '</form>',
+            buttons: {
+                sửa: {
+                    text: 'Sửa',
+                    btnClass: 'btn-warning',
+                    action: function () {
+                        var newNguonThu = $('.formName input:eq(0)').val();
+                        var newLoai = $('.formName input:eq(1)').val();
+                        var newSoTien = $('.formName input:eq(2)').val();
+                        var newThoiGian = $('.formName input:eq(3)').val();
+                        // Thực hiện xử lý chỉnh sửa ở đây
+                    }
+                },
+                cancel: function () {
+                    // Hủy thao tác chỉnh sửa
+                }
+            }
+        });
+    });
+
+
+    // Bắt sự kiện click cho nút "Thêm mới" của bảng London
+    $('#addNew').on('click', function () {
+        $.confirm({
+            title: 'Thêm Mới Nguồn Thu',
+            content: '' +
+                '<form action="" class="formName">' +
+                '<div class="form-group">' +
+                '<label>Nguồn Thu:</label>' +
+                '<input type="text" class="form-control" required />' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<label>Loại:</label>' +
+                '<input type="text" class="form-control" required />' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<label>Số Tiền:</label>' +
+                '<input type="text" class="form-control" required />' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<label>Thời Gian:</label>' +
+                '<input type="date" class="form-control" required />' +
+                '</div>' +
+                '</form>',
+            buttons: {
+                thêm: {
+                    text: 'Thêm',
+                    btnClass: 'btn-success',
+                    action: function () {
+                        var nguonThu = $('.formName input:eq(0)').val();
+                        var loai = $('.formName input:eq(1)').val();
+                        var soTien = $('.formName input:eq(2)').val();
+                        var thoiGian = $('.formName input:eq(3)').val();
+                        // Thực hiện thêm mới dữ liệu ở đây
+                    }
+                },
+                cancel: function () {
+                    // Hủy thao tác thêm mới
+                }
+            }
+        });
+    });
+
 
 });
 
