@@ -119,20 +119,20 @@ namespace Store
                     case "add_expense":
                         {
                             cm.Parameters.Add("@id_user", SqlDbType.Int).Value = Request["id_user"];
-                            cm.Parameters.Add("@name", SqlDbType.Int).Value = Request["name"];
+                            cm.Parameters.Add("@name", SqlDbType.NVarChar, 100).Value = Request["name"];
                             cm.Parameters.Add("@id_category", SqlDbType.Int).Value = Request["id_category"];
-                            cm.Parameters.Add("@money", SqlDbType.Int).Value = Request["money"];
-                            cm.Parameters.Add("@time", SqlDbType.Int).Value = Request["time"];
+                            cm.Parameters.Add("@money", SqlDbType.Money).Value = Request["money"];
+                            cm.Parameters.Add("@time", SqlDbType.DateTime).Value = Request["time"];
                             break;
                         }
                     case "modify_income":
                     case "modify_expense":
                         {
                             cm.Parameters.Add("@id", SqlDbType.Int).Value = Request["id"];
-                            cm.Parameters.Add("@name", SqlDbType.Int).Value = Request["name"];
+                            cm.Parameters.Add("@name", SqlDbType.NVarChar,100).Value = Request["name"];
                             cm.Parameters.Add("@id_category", SqlDbType.Int).Value = Request["id_category"];
-                            cm.Parameters.Add("@money", SqlDbType.Int).Value = Request["money"];
-                            cm.Parameters.Add("@time", SqlDbType.Int).Value = Request["time"];
+                            cm.Parameters.Add("@money", SqlDbType.Money).Value = Request["money"];
+                            cm.Parameters.Add("@time", SqlDbType.DateTime).Value = Request["time"];
                             break;
                         }
                     case "delete_income":
@@ -146,17 +146,17 @@ namespace Store
                     case "add_target":
                         {
                             cm.Parameters.Add("@id_user", SqlDbType.Int).Value = Request["id_user"];
-                            cm.Parameters.Add("@name", SqlDbType.Int).Value = Request["name"];
-                            cm.Parameters.Add("@money", SqlDbType.Int).Value = Request["money"];
-                            cm.Parameters.Add("@time", SqlDbType.Int).Value = Request["time"];
+                            cm.Parameters.Add("@name", SqlDbType.NVarChar, 100).Value = Request["name"];
+                            cm.Parameters.Add("@money", SqlDbType.Money).Value = Request["money"];
+                            cm.Parameters.Add("@time", SqlDbType.DateTime).Value = Request["time"];
                             break;
                         }
                     case "modify_target":
                         {
                             cm.Parameters.Add("@id", SqlDbType.Int).Value = Request["id"];
-                            cm.Parameters.Add("@name", SqlDbType.Int).Value = Request["name"];
-                            cm.Parameters.Add("@money", SqlDbType.Int).Value = Request["money"];
-                            cm.Parameters.Add("@time", SqlDbType.Int).Value = Request["time"];
+                            cm.Parameters.Add("@name", SqlDbType.NVarChar, 100).Value = Request["name"];
+                            cm.Parameters.Add("@money", SqlDbType.Money).Value = Request["money"];
+                            cm.Parameters.Add("@time", SqlDbType.DateTime).Value = Request["time"];
                             break;
                         }
                 }
