@@ -98,6 +98,7 @@
     <Content Include="jquery\jquery-confirm.js" />
     <Content Include="jquery\jquery.min.js" />
     <Content Include="script.js" />
+    <Content Include="sql.sql" />
     <Content Include="style.css" />
     <Content Include="Web.config" />
   </ItemGroup>
