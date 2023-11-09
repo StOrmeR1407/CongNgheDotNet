@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+
     $('#login').on('click', function () {
         var dialog_login = $.confirm({
             title: 'Đăng nhập!',
@@ -130,7 +131,7 @@
                                 action: 'modify',
                                 id: 7,
                                 name: $('#name').val(),
-                                email: $('#emaill').val(),   
+                                email: $('#emaill').val(),
                             },
                             function (data) {
                                 var j = JSON.parse(data);
@@ -139,7 +140,7 @@
                                     dialog_login.close();
                                 }
                                 else {
-                                    $.alert("Sửa đổi thất bại: " + j.msg); 
+                                    $.alert("Sửa đổi thất bại: " + j.msg);
                                 }
                             }
                         );
@@ -156,6 +157,46 @@
         });
     });
 
+    $('#income_btn').on('click', function () {
+        $.post("API.aspx",
+            {
+                action: 'list_income',
+                id_user: 2,
+            },
+            function (data) {
+                var j = JSON.parse(data);
+                if (j.ok) {
+                    let stt = 0;
+                    var content = `
+                    <table class="table table-hover tablesorter myTable">
+                        <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Money</th>
+                            <th>Time</th>
+                        </tr>
+                        </thead>
+                        <tbody>`;
+                    for (let i of j.datas) {
+                        content += '<tr>' +
+                            '<td>' + ++stt + '</td>' +
+                            '<td>' + i.name + '</td>' +
+                            '<td>' + i.category + '</td>' +
+                            '<td>' + i.money + '</td>' +
+                            '<td>' + i.time + '</td>' +
+                            '</tr>';
+                    }
+                    content += '</tbody></table>';
+                    $('#income_table').html(content);
+                }
+                else {
+                    $.alert("Tải thất bại: " + j.msg);
+                }
+            }
+        );
+    });
 });
 
 function openCity(evt, cityName) {
