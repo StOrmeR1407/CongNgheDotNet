@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
-
+    var check_login = false;
+    var id_user, cookie, name;
     $('#login').on('click', function () {
         var dialog_login = $.confirm({
             title: 'Đăng nhập!',
@@ -27,6 +28,9 @@
                                 
                                 if (j.ok) {
                                     $.alert("Đăng nhập thành công");
+                                    setCookie("id_user", j.id, 365);
+                                    setCookie("cookie", j.cookie, 365);
+                                    setCookie("name", j.name, 365);
                                 }
                                 else {
                                     $.alert("Đăng nhập thất bại");
@@ -156,7 +160,6 @@
             }
         });
     });
-
     $('#add_income').on('click', function () {
 
         $.confirm({
@@ -223,21 +226,45 @@
         });
     });
     $('#income_btn').on('click', function () {
+        $('#income_table').loading();
         income();
         $('#add_income').css("display", "block");
-    });
-    function income() {
-        $.post("API.aspx",
-            {
-                action: 'list_income',
-                id_user: 2,
-            },
-            function (data) {
-                var j = JSON.parse(data);
-                if (j.ok) {
-                    let stt = 0;
-                    var content = `                   
-                    <table class="table table-hover tablesorter myTable">
+    });   
+
+    ck_login(check_login);
+});
+function ck_login(check_login) {
+    if (!check_login) {
+        if (checkCookie("id_user") && checkCookie("cookie")) {
+            id_user = getCookie("id_user");
+            cookie = getCookie("cookie")
+            $.post("API.aspx",
+                {
+                    action: 'checklogin',
+                    id_user: id_user,
+                    cookie: cookie
+                },
+                function (data) {
+                    var j = JSON.parse(data);
+                    if (j.ok) {
+                        check_login = true;
+                    }
+                });
+        }
+    }      
+}
+function income() {
+    $.post("API.aspx",
+        {
+            action: 'list_income',
+            id_user: 2,
+        },
+        function (data) {
+            var j = JSON.parse(data);
+            if (j.ok) {
+                let stt = 0;
+                var content = `                   
+                    <table class="table table-hover">
                         <thead>
                         <tr>
                             <th>STT</th>
@@ -248,75 +275,76 @@
                         </tr>
                         </thead>
                         <tbody>`;
-                    for (let i of j.datas) {
-                        content += '<tr>' +
-                            '<td>' + ++stt + '</td>' +
-                            '<td>' + i.name + '</td>' +
-                            '<td>' + i.category + '</td>' +
-                            '<td>' + i.money + '</td>' +
-                            '<td>' + i.time + '</td>' +
-                            '<td><button type="button" class="btn btn-warning modify_btn" data-id=' + i.id + '>Sửa</button></td>' +
-                            '<td><button type="button" class="btn btn-danger delete_btn" data-id=' + i.id + '>Xoá</button></td>' +
-                            '</tr>';
-                    }
-                    content += '</tbody></table>';
-                    $('#income_table').html(content);
+                for (let i of j.datas) {
+                    content += '<tr>' +
+                        '<td>' + ++stt + '</td>' +
+                        '<td>' + i.name + '</td>' +
+                        '<td>' + i.category + '</td>' +
+                        '<td>' + i.money + '</td>' +
+                        '<td>' + i.time + '</td>' +
+                        '<td><button type="button" class="btn btn-warning modify_btn" data-id=' + i.id + '>Sửa</button></td>' +
+                        '<td><button type="button" class="btn btn-danger delete_btn" data-id=' + i.id + '>Xoá</button></td>' +
+                        '</tr>';
                 }
-                else {
-                    $.alert("Tải thất bại: " + j.msg);
-                }
+                content += '</tbody></table>';
+                $('#income_table').html(content);
+                $('#income_table').loading('stop');
+            }
+            else {
+                $.alert("Tải thất bại: " + j.msg);
+            }
 
-                $('.delete_btn').on('click', function () {
-                    let iid = $(this).attr("data-id");
-                    $.confirm({
-                        title: 'Xoá',
-                        content: `
+            $('.delete_btn').on('click', function () {
+                let iid = $(this).attr("data-id");
+                $.confirm({
+                    title: 'Xoá',
+                    content: `
                 Bạn có muốn xoá không ?`,
-                        buttons: {
-                            delete: {
-                                text: 'Xoá',
-                                btnClass: 'btn-warning',
-                                action: function () {
-                                    $.post("API.aspx",
-                                        {
-                                            action: 'delete_income',
-                                            id: iid,
-                                        },
-                                        function (data) {
-                                            var j = JSON.parse(data);
-                                            if (j.ok) {
-                                                $.alert("Xoá thành công");
-                                                income();
-                                            }
-                                            else {
-                                                $.alert("Xoá thất bại: " + j.msg);
-                                            }
+                    buttons: {
+                        delete: {
+                            text: 'Xoá',
+                            btnClass: 'btn-warning',
+                            action: function () {
+                                $.post("API.aspx",
+                                    {
+                                        action: 'delete_income',
+                                        id: iid,
+                                    },
+                                    function (data) {
+                                        var j = JSON.parse(data);
+                                        if (j.ok) {
+                                            $.alert("Xoá thành công");
+                                            income();
                                         }
-                                    );
-                                }
-                            },
-                            cancel: function () {
-                                //close
-                            },
+                                        else {
+                                            $.alert("Xoá thất bại: " + j.msg);
+                                        }
+                                    }
+                                );
+                            }
                         },
-                        onContentReady: function () {
+                        cancel: function () {
+                            //close
+                        },
+                    },
+                    onContentReady: function () {
 
-                        }
-                    });
-                });
-
-                $('.modify_btn').on('click', function () {
-                    let iid = $(this).attr("data-id");
-                    let income;
-                    for (var item of j.datas) {
-                        if (item.id == iid) {
-                            income = item;
-                            break;
-                        }
                     }
-                    $.confirm({
-                        title: 'Xoá',
-                        content: `
+                });
+            });
+
+            $('.modify_btn').on('click', function () {
+                let iid = $(this).attr("data-id");
+                let income;
+                for (var item of j.datas) {
+                    if (item.id == iid) {
+                        income = item;
+                        break;
+                    }
+                }
+                $.confirm({
+                    title: 'Sửa',
+                    content: `
                         <div class="form-floating mb-3 mt-3">
                           <input type="text" class="form-control" id="modify_name" placeholder="Enter name" value="${income.name}">
                           <label>Name</label>
@@ -341,47 +369,77 @@
                           <label >Time</label>
                         </div>
                         `,
-                        buttons: {
-                            delete: {
-                                text: 'Sửa',
-                                btnClass: 'btn-warning',
-                                action: function () {
-                                    $.post("API.aspx",
-                                        {
-                                            action: 'modify_income',
-                                            id: iid,
-                                            name: $('#modify_name').val(),
-                                            id_category: $('#modify_category').val(),
-                                            money: $('#modify_money').val(),
-                                            time: $('#modify_time').val(),
-                                        },
-                                        function (data) {
-                                            var j = JSON.parse(data);
-                                            if (j.ok) {
-                                                $.alert("Sửa thành công");
-                                                income();
-                                            }
-                                            else {
-                                                $.alert("Sửa thất bại: " + j.msg);
-                                            }
+                    buttons: {
+                        delete: {
+                            text: 'Sửa',
+                            btnClass: 'btn-warning',
+                            action: function () {
+                                $.post("API.aspx",
+                                    {
+                                        action: 'modify_income',
+                                        id: iid,
+                                        name: $('#modify_name').val(),
+                                        id_category: $('#modify_category').val(),
+                                        money: $('#modify_money').val(),
+                                        time: $('#modify_time').val(),
+                                    },
+                                    function (data) {
+                                        var j = JSON.parse(data);
+                                        if (j.ok) {
+                                            $.alert("Sửa thành công");
+                                            return income();
                                         }
-                                    );
-                                }
-                            },
-                            cancel: function () {
-                                //close
-                            },
+                                        else {
+                                            $.alert("Sửa thất bại: " + j.msg);
+                                        }
+                                        
+                                    }
+                                );
+                            }
                         },
-                        onContentReady: function () {
+                        cancel: function () {
+                            //close
+                        },
+                    },
+                    onContentReady: function () {
 
-                        }
-                    });
-                });                
-            }
-        );     
+                    }
+                });
+            });
+        }
+    );
+}
+function setCookie(cname, cvalue, exdays) {
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    let expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+function getCookie(cname) {
+    let name = cname + "=";
+    let ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
     }
-});
-
+    return "";
+}
+function checkCookie(name) {
+    let user = getCookie(name);
+    if (user != "") {
+        return false;
+    } else {
+        return false;
+    }
+}
+function eraseCookie(name) {
+    document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
 function openCity(evt, cityName) {
     // Declare all variables
     var i, tabcontent, tablinks;

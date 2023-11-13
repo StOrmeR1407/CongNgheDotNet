@@ -10,6 +10,7 @@
     <script src="bootstrap/js/bootstrap.bundle.js"></script>
     <link href="tablesorter/css/theme.default.min.css" rel="stylesheet" />
     <script src="tablesorter/js/jquery.tablesorter.js"></script>
+    <script src="loading/jquery.loading.min.js"></script>
     <link href="style.css" rel="stylesheet" />
     <script src="script.js"></script>
 </head>
@@ -17,7 +18,9 @@
     <!-- Tab links -->
     <div class="h-100 p-5 text-white bg-dark rounded-3">
         <h2>Ví Stormer</h2>
+        <h4 style="float:right"> Xin chào, Học</h4>
         <p>Tiền của bạn cũng là tiền của chúng tôi</p>
+        <p style="float:right">Balance: 44900000 vnd</p>
     </div>
     <div class="tab">
         <button class="tablinks" id="home_btn" onclick="openCity(event, 'Home')">Home</button>
@@ -25,7 +28,7 @@
         <button class="tablinks" onclick="openCity(event, 'Expense')">Expense</button>
         <button style="float:right" id="login" class="tablinks">Log in</button>
         <button style="float:right" id="signup" class="tablinks">Sign up</button>
-        <button style="float:right" id="modify" class="tablinks">Modify</button>
+        <button style="float:right" id="logout" class="tablinks">Log out</button>
     </div>
 
     <!-- Tab content -->
