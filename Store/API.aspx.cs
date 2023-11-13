@@ -84,6 +84,12 @@ namespace Store
                             cm.Parameters.Add("@email", SqlDbType.VarChar, 100).Value = Request["email"];
                             break;
                         }
+                    case "check_login":
+                        {
+                            cm.Parameters.Add("@id_user", SqlDbType.Int).Value = Request["id_user"];
+                            cm.Parameters.Add("@id_user", SqlDbType.VarChar, 100).Value = Request["id_user"];
+                            break;
+                        }
                 }
                 json = (string)db.Scalar(cm);
                 
