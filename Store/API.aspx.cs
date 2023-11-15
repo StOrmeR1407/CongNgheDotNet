@@ -26,10 +26,11 @@ namespace Store
             string action = Request["action"];
             switch(action)
             {
-                case "check_login":
+                case "checklogin":
                 case "login":
                 case "signup":
                 case "modify":
+                case "logout":
                     {
                         user_action(action);
                         break;
@@ -47,6 +48,7 @@ namespace Store
                 case "add_target":
                 case "modify_target":
                 case "delete_target":
+                case "statistic_general":
                     {
                         money(action);
                         break;
@@ -84,10 +86,16 @@ namespace Store
                             cm.Parameters.Add("@email", SqlDbType.VarChar, 100).Value = Request["email"];
                             break;
                         }
-                    case "check_login":
+                    case "checklogin":
                         {
                             cm.Parameters.Add("@id_user", SqlDbType.Int).Value = Request["id_user"];
-                            cm.Parameters.Add("@id_user", SqlDbType.VarChar, 100).Value = Request["id_user"];
+                            cm.Parameters.Add("@cookie", SqlDbType.VarChar, 100).Value = Request["cookie"];
+                            break;
+                        }
+                    case "logout":
+                        {
+                            cm.Parameters.Add("@id_user", SqlDbType.Int).Value = Request["id_user"];
+                            cm.Parameters.Add("@cookie", SqlDbType.VarChar, 100).Value = Request["cookie"];
                             break;
                         }
                 }
@@ -116,6 +124,7 @@ namespace Store
                     case "list_income":
                     case "list_expense":
                     case "list_target":
+                    case "statistic_general":
                         {
                             cm.Parameters.Add("@id_user", SqlDbType.Int).Value = Request["id_user"];
                             break;
