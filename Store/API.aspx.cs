@@ -26,10 +26,11 @@ namespace Store
             string action = Request["action"];
             switch(action)
             {
-                case "check_login":
+                case "checklogin":
                 case "login":
                 case "signup":
                 case "modify":
+                case "logout":
                     {
                         user_action(action);
                         break;
@@ -47,6 +48,8 @@ namespace Store
                 case "add_target":
                 case "modify_target":
                 case "delete_target":
+                case "statistic_general":
+                case "statistic_income":
                     {
                         money(action);
                         break;
@@ -84,10 +87,16 @@ namespace Store
                             cm.Parameters.Add("@email", SqlDbType.VarChar, 100).Value = Request["email"];
                             break;
                         }
-                    case "check_login":
+                    case "checklogin":
                         {
                             cm.Parameters.Add("@id_user", SqlDbType.Int).Value = Request["id_user"];
-                            cm.Parameters.Add("@id_user", SqlDbType.VarChar, 100).Value = Request["id_user"];
+                            cm.Parameters.Add("@cookie", SqlDbType.VarChar, 100).Value = Request["cookie"];
+                            break;
+                        }
+                    case "logout":
+                        {
+                            cm.Parameters.Add("@id_user", SqlDbType.Int).Value = Request["id_user"];
+                            cm.Parameters.Add("@cookie", SqlDbType.VarChar, 100).Value = Request["cookie"];
                             break;
                         }
                 }
@@ -116,6 +125,7 @@ namespace Store
                     case "list_income":
                     case "list_expense":
                     case "list_target":
+                    case "statistic_general":
                         {
                             cm.Parameters.Add("@id_user", SqlDbType.Int).Value = Request["id_user"];
                             break;
@@ -163,6 +173,13 @@ namespace Store
                             cm.Parameters.Add("@name", SqlDbType.NVarChar, 100).Value = Request["name"];
                             cm.Parameters.Add("@money", SqlDbType.Money).Value = Request["money"];
                             cm.Parameters.Add("@time", SqlDbType.DateTime).Value = Request["time"];
+                            break;
+                        }
+                    case "statistic_income":
+                        {
+                            cm.Parameters.Add("@id_user", SqlDbType.Int).Value = Request["id_user"];
+                            cm.Parameters.Add("@target_month", SqlDbType.Int).Value = Request["target_month"];
+                            cm.Parameters.Add("@target_year", SqlDbType.Int).Value = Request["target_year"];
                             break;
                         }
                 }
