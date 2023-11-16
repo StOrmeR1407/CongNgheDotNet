@@ -1,4 +1,5 @@
-﻿$(document).ready(function () {
+﻿google.charts.load('current', { packages: ['corechart', 'timeline'] });
+$(document).ready(function () {
     var check_login = false;
     var id_user, cookie;
     check_login = ck_login(check_login);
@@ -255,6 +256,7 @@
                     text: 'Thêm',
                     btnClass: 'btn-primary',
                     action: function () {
+                        let id_ca = $('#add_money').val();
                         $.post("API.aspx",
                             {
                                 action: 'add_income',
@@ -286,18 +288,17 @@
             }
         });
     });
-
     $('#add_expense').on('click', function () {
 
         $.confirm({
             title: 'Thêm',
             content: `
                         <div class="form-floating mb-3 mt-3">
-                          <input type="text" class="form-control" id="modify_name" placeholder="Enter name">
+                          <input type="text" class="form-control" id="add_name" placeholder="Enter name">
                           <label>Name</label>
                         </div>
 
-                        <select class="form-select" aria-label="Default select example" id="modify_category">
+                        <select class="form-select" aria-label="Default select example" id="add_category">
                           <option value="0" selected>Chọn một loại khoản chi</option>
                           <option value="1">Chi tiêu thiết yếu</option>
                           <option value="2">Chi tiêu cho sở thích và giải trí</option>
@@ -308,12 +309,12 @@
                         </select>
 
                         <div class="form-floating mt-3 mb-3">
-                          <input type="number" class="form-control" id="modify_money" placeholder="Enter money">
+                          <input type="number" class="form-control" id="add_money" placeholder="Enter money">
                           <label >Money</label>
                         </div>
 
                         <div class="form-floating mt-3 mb-3">
-                          <input type="date" class="form-control" id="modify_time" placeholder="Enter time">
+                          <input type="date" class="form-control" id="add_time" placeholder="Enter time">
                           <label >Time</label>
                         </div>
 
@@ -355,6 +356,79 @@
         });
     });
 
+    $('#add_target').on('click', function () {
+
+        $.confirm({
+            title: 'Thêm',
+            content: `
+                        <div class="form-floating mb-3 mt-3">
+                          <input type="text" class="form-control" id="add_name" placeholder="Enter name">
+                          <label>Name</label>
+                        </div>
+
+                        <div class="form-floating mt-3 mb-3">
+                          <input type="number" class="form-control" id="add_money" placeholder="Enter money">
+                          <label >Money</label>
+                        </div>
+
+                        <div class="form-floating mt-3 mb-3">
+                          <input type="date" class="form-control" id="add_time" placeholder="Enter time">
+                          <label >Time</label>
+                        </div>
+
+                        `,
+            buttons: {
+                ADD: {
+                    text: 'Thêm',
+                    btnClass: 'btn-primary',
+                    action: function () {
+                        $.post("API.aspx",
+                            {
+                                action: 'add_target',
+                                id_user: id_user,
+                                name: $('#add_name').val(),
+                                money: $('#add_money').val(),
+                                time: $('#add_time').val(),
+                            },
+                            function (data) {
+                                var j = JSON.parse(data);
+                                if (j.ok) {
+                                    $.alert("Thêm thành công");
+                                    income();
+                                }
+                                else {
+                                    $.alert("Thêm thất bại: " + j.msg);
+                                }
+                            }
+                        );
+                    }
+                },
+                cancel: function () {
+                    //close
+                },
+            },
+            onContentReady: function () {
+
+            }
+        });
+    });
+
+    $('#statistic_income').on('click', function () {
+        $.confirm({
+            title: 'Thống kê nguồn thu',
+            type: 'dark',
+            closeIcon: true,
+            typeAnimated: true,
+            columnClass: 'xlarge',
+            content: `
+            <div id="statistic_income_chart" style="width: 100%; height: 100%;">    
+            `,
+            onContentReady: function () {
+              drawColumnChart();
+            }
+        });
+    });
+
     $('#income_btn').on('click', function () {
         if (check_login == false) {
             $.alert("Cần phải đăng nhập trước");
@@ -374,6 +448,17 @@
             $('#expense_table').loading();
             expense();
             $('#add_expense').css("display", "block");
+        }
+    });
+
+    $('#target_btn').on('click', function () {
+        if (check_login == false) {
+            $.alert("Cần phải đăng nhập trước");
+        }
+        else {
+            $('#target_table').loading();
+            target();
+            $('#add_target').css("display", "block");
         }
     });
 
@@ -439,6 +524,8 @@ function income() {
                             <th>Category</th>
                             <th>Money</th>
                             <th>Time</th>
+                            <th>Sửa</th>
+                            <th>Xoá</th>
                         </tr>
                         </thead>
                         <tbody>`;
@@ -455,7 +542,7 @@ function income() {
                 }
                 content += `</tbody></table>
                  <script>
-                    $(".myTable").tablesorter();
+                    $('.myTable').DataTable();
                 </script>
                 `;
                 $('#income_table').html(content);
@@ -485,7 +572,7 @@ function income() {
                                         var j = JSON.parse(data);
                                         if (j.ok) {
                                             $.alert("Xoá thành công");
-                                            income();
+                                            return income();
                                         }
                                         else {
                                             $.alert("Xoá thất bại: " + j.msg);
@@ -599,6 +686,8 @@ function expense() {
                             <th>Category</th>
                             <th>Money</th>
                             <th>Time</th>
+                            <th>Sửa</th>
+                            <th>Xoá</th>
                         </tr>
                         </thead>
                         <tbody>`;
@@ -615,7 +704,7 @@ function expense() {
                 }
                 content += `</tbody></table>
                  <script>
-                    $(".myTable").tablesorter();
+                    $('.myTable').DataTable();
                 </script>
                 `;
                 $('#expense_table').html(content);
@@ -645,7 +734,7 @@ function expense() {
                                         var j = JSON.parse(data);
                                         if (j.ok) {
                                             $.alert("Xoá thành công");
-                                            income();
+                                            return expense();
                                         }
                                         else {
                                             $.alert("Xoá thất bại: " + j.msg);
@@ -719,7 +808,157 @@ function expense() {
                                         var j = JSON.parse(data);
                                         if (j.ok) {
                                             $.alert("Sửa thành công");
-                                            return income();
+                                            return expense();
+                                        }
+                                        else {
+                                            $.alert("Sửa thất bại: " + j.msg);
+                                        }
+
+                                    }
+                                );
+                            }
+                        },
+                        cancel: function () {
+                            //close
+                        },
+                    },
+                    onContentReady: function () {
+
+                    }
+                });
+            });
+        }
+    );
+}
+function target() {
+    $.post("API.aspx",
+        {
+            action: 'list_target',
+            id_user: id_user,
+        },
+        function (data) {
+            var j = JSON.parse(data);
+            if (j.ok) {
+                let stt = 0;
+                var content = `                   
+                    <table class="table table-hover myTable">
+                        <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Name</th>
+                            <th>Money</th>
+                            <th>Time</th>
+                            <th>Sửa</th>
+                            <th>Xoá</th>
+                        </tr>
+                        </thead>
+                        <tbody>`;
+                for (let i of j.datas) {
+                    content += '<tr>' +
+                        '<td>' + ++stt + '</td>' +
+                        '<td>' + i.name + '</td>' +
+                        '<td>' + i.money + '</td>' +
+                        '<td>' + i.time + '</td>' +
+                        '<td><button type="button" class="btn btn-warning modify_btn" data-id=' + i.id + '>Sửa</button></td>' +
+                        '<td><button type="button" class="btn btn-danger delete_btn" data-id=' + i.id + '>Xoá</button></td>' +
+                        '</tr>';
+                }
+                content += `</tbody></table>
+                 <script>
+                    $('.myTable').DataTable();
+                </script>
+                `;
+                $('#target_table').html(content);
+                $('#target_table').loading('stop');
+            }
+            else {
+                $.alert("Tải thất bại: " + j.msg);
+            }
+
+            $('.delete_btn').on('click', function () {
+                let iid = $(this).attr("data-id");
+                $.confirm({
+                    title: 'Xoá',
+                    content: `
+                Bạn có muốn xoá không ?`,
+                    buttons: {
+                        delete: {
+                            text: 'Xoá',
+                            btnClass: 'btn-warning',
+                            action: function () {
+                                $.post("API.aspx",
+                                    {
+                                        action: 'delete_target',
+                                        id: iid,
+                                    },
+                                    function (data) {
+                                        var j = JSON.parse(data);
+                                        if (j.ok) {
+                                            $.alert("Xoá thành công");
+                                            return target();
+                                        }
+                                        else {
+                                            $.alert("Xoá thất bại: " + j.msg);
+                                        }
+                                    }
+                                );
+                            }
+                        },
+                        cancel: function () {
+                            //close
+                        },
+                    },
+                    onContentReady: function () {
+
+                    }
+                });
+            });
+
+            $('.modify_btn').on('click', function () {
+                let iid = $(this).attr("data-id");
+                let target;
+                for (var item of j.datas) {
+                    if (item.id == iid) {
+                        target = item;
+                        break;
+                    }
+                }
+                $.confirm({
+                    title: 'Sửa',
+                    content: `
+                        <div class="form-floating mb-3 mt-3">
+                          <input type="text" class="form-control" id="modify_name" placeholder="Enter name" value="${target.name}">
+                          <label>Name</label>
+                        </div>
+
+                        <div class="form-floating mt-3 mb-3">
+                          <input type="number" class="form-control" id="modify_money" placeholder="Enter money" value="${target.money}">
+                          <label >Money</label>
+                        </div>
+
+                        <div class="form-floating mt-3 mb-3">
+                          <input type="date" class="form-control" id="modify_time" placeholder="Enter time" value=${target.time.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2")}>
+                          <label >Time</label>
+                        </div>
+                        `,
+                    buttons: {
+                        delete: {
+                            text: 'Sửa',
+                            btnClass: 'btn-warning',
+                            action: function () {
+                                $.post("API.aspx",
+                                    {
+                                        action: 'modify_target',
+                                        id: iid,
+                                        name: $('#modify_name').val(),
+                                        money: $('#modify_money').val(),
+                                        time: $('#modify_time').val(),
+                                    },
+                                    function (data) {
+                                        var j = JSON.parse(data);
+                                        if (j.ok) {
+                                            $.alert("Sửa thành công");
+                                            return target();
                                         }
                                         else {
                                             $.alert("Sửa thất bại: " + j.msg);
@@ -761,14 +1000,12 @@ function home() {
                 var total = item.total;
                 exp.push([name, total])
             } 
-            drawChart(inc, 'Tổng nguồn thu', 'chart_income');
-            drawChart(exp, 'Tổng khoản chi', 'chart_expense');
+            drawPieChart(inc, 'Tổng nguồn thu', 'chart_income');
+            drawPieChart(exp, 'Tổng khoản chi', 'chart_expense');
             $('#home_chart').loading('stop');
         })
 }
-
-function drawChart(inc,a,b) {
-        google.charts.load('current', { packages: ['corechart', 'timeline'] });
+function drawPieChart(inc,a,b) {
         // Create the data table.
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'ok');
@@ -785,6 +1022,47 @@ function drawChart(inc,a,b) {
         // Instantiate and draw our chart, passing in some options.
         var chart = new google.visualization.PieChart(document.getElementById(b));
         chart.draw(data, options);
+}
+
+function drawColumnChart() {
+    var arr = [];
+    arr.push(["Element", "Density", { role: "style" }]);
+    $.post("API.aspx",
+        {
+            action: "statistic_income",
+            id_user: id_user,
+            target_month: 10,
+            target_year: 2023
+        },
+        function (data) {
+            var json = JSON.parse(data);
+            for (var item of json.datas) {
+                var day = item.day;
+                var money = item.money; 
+                var style = "#76A7FA";
+                arr.push([day, money,style])
+            }           
+            var data = google.visualization.arrayToDataTable(arr);
+            var view = new google.visualization.DataView(data);
+            view.setColumns([0, 1,
+                {
+                    calc: "stringify",
+                    sourceColumn: 1,
+                    type: "string",
+                    role: "annotation"
+                },
+                2]);
+
+            var options = {
+                title: "Density of Precious Metals, in g/cm^3",
+                width: 600,
+                height: 400,
+                bar: { groupWidth: "95%" },
+                legend: { position: "none" },
+            };
+            var chart = new google.visualization.ColumnChart(document.getElementById("statistic_income_chart"));
+            chart.draw(view, options);
+        });
 }
 function setCookie(cname, cvalue, exdays) {
     const d = new Date();

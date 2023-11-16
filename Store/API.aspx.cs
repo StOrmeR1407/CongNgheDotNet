@@ -49,6 +49,7 @@ namespace Store
                 case "modify_target":
                 case "delete_target":
                 case "statistic_general":
+                case "statistic_income":
                     {
                         money(action);
                         break;
@@ -172,6 +173,13 @@ namespace Store
                             cm.Parameters.Add("@name", SqlDbType.NVarChar, 100).Value = Request["name"];
                             cm.Parameters.Add("@money", SqlDbType.Money).Value = Request["money"];
                             cm.Parameters.Add("@time", SqlDbType.DateTime).Value = Request["time"];
+                            break;
+                        }
+                    case "statistic_income":
+                        {
+                            cm.Parameters.Add("@id_user", SqlDbType.Int).Value = Request["id_user"];
+                            cm.Parameters.Add("@target_month", SqlDbType.Int).Value = Request["target_month"];
+                            cm.Parameters.Add("@target_year", SqlDbType.Int).Value = Request["target_year"];
                             break;
                         }
                 }
