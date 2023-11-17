@@ -31,6 +31,7 @@ namespace Store
                 case "signup":
                 case "modify":
                 case "logout":
+                case "changepw":
                     {
                         user_action(action);
                         break;
@@ -50,6 +51,7 @@ namespace Store
                 case "delete_target":
                 case "statistic_general":
                 case "statistic_income":
+                case "statistic_expense":
                     {
                         money(action);
                         break;
@@ -97,6 +99,13 @@ namespace Store
                         {
                             cm.Parameters.Add("@id_user", SqlDbType.Int).Value = Request["id_user"];
                             cm.Parameters.Add("@cookie", SqlDbType.VarChar, 100).Value = Request["cookie"];
+                            break;
+                        }
+                    case "changepw":
+                        {
+                            cm.Parameters.Add("@email", SqlDbType.VarChar, 100).Value = Request["email"];
+                            cm.Parameters.Add("@password", SqlDbType.VarChar, 100).Value = Request["password"];
+                            cm.Parameters.Add("@newpassword", SqlDbType.VarChar, 100).Value = Request["newpassword"];
                             break;
                         }
                 }
@@ -176,6 +185,7 @@ namespace Store
                             break;
                         }
                     case "statistic_income":
+                    case "statistic_expense":
                         {
                             cm.Parameters.Add("@id_user", SqlDbType.Int).Value = Request["id_user"];
                             cm.Parameters.Add("@target_month", SqlDbType.Int).Value = Request["target_month"];

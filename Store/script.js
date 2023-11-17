@@ -14,7 +14,7 @@ $(document).ready(function () {
                 </div>
 
                 <div class="form-floating mb-3 mt-3">
-                  <input type="text" class="form-control" id="password" placeholder="Enter password">
+                  <input type="password" class="form-control" id="password" placeholder="Enter password">
                   <label>Password</label>
                 </div> `
                  ,
@@ -38,9 +38,8 @@ $(document).ready(function () {
                                     setCookie("cookie", j.cookie, 365);
                                     $('#name_of_user').html("Xin chào, " + j.name);   
                                     $('#balance').html("Số dư: " + '<span>' + j.balance + '</span>');
-                                    $('#login').css("display", "none");
-                                    $('#signup').css("display", "none");
-                                    $('#logout').css("display", "block");
+                                    $('.nologin button').css("display", "none");
+                                    $('.logged button').css("display", "block");
                                     check_login = true;
                                     location.reload();
                                 }
@@ -122,60 +121,106 @@ $(document).ready(function () {
         });
     });
 
-    $('#modify').on('click', function () {
-        var dialog_login = $.confirm({
-            title: 'Sửa đổi!',
-            content: `
-                <div class="form-floating mb-3 mt-3">
-                  <input type="text" class="form-control" id="name" placeholder="Enter name">
-                  <label>Name</label>
-                </div>
-
-                <div class="form-floating mt-3 mb-3">
-                  <input type="text" class="form-control" id="emaill" placeholder="Enter email">
-                  <label >Email</label>
-                </div>
-            `
-            ,
-            buttons: {
-                formSubmit: {
-                    text: 'Submit',
-                    btnClass: 'btn-blue',
-                    action: function () {
-                        $.post("API.aspx",
-                            {
-                                action: 'modify',
-                                id: 7,
-                                name: $('#name').val(),
-                                email: $('#emaill').val(),
-                            },
-                            function (data) {
-                                var j = JSON.parse(data);
-                                if (j.ok) {
-                                    $.alert("Sửa đổi thành công");
-                                    dialog_login.close();
-                                }
-                                else {
-                                    $.alert("Sửa đổi thất bại: " + j.msg);
-                                }
-                            }
-                        );
-                        return false;
-                    }
-                },
-                cancel: function () {
-                    //close
-                },
+    $('#setting').on('click', function () {
+        $.post("API.aspx",
+            {
+                action: 'checklogin',
+                id_user: id_user,
+                cookie: cookie
             },
-            onContentReady: function () {
+            function (data) {
+                var j = JSON.parse(data);
+                if (j.ok) {                   
+                    var dialog_login = $.dialog({
+                        title: 'Setting',
+                        columnClass: 'large',
+                        content: `
+                            <div class="mb-4 bg-body-tertiary rounded-3">
+                              <div class="container-fluid">
+                                <h1 class="display-6 fw-bold p-4">Sửa thông tin người dùng</h1>     
+                                <div class="form-floating mb-3 mt-3">
+                                  <input type="text" class="form-control" id="name" placeholder="Enter name" value="${j.name}">
+                                  <label>Name</label>
+                                </div>
+                                <div class="form-floating mb-3 mt-3">
+                                  <input type="text" class="form-control" id="email" placeholder="Enter email" value="${j.email}">
+                                  <label>Email</label>
+                                </div>
+                                <button class="btn btn-primary" id="modify" type="button">Sửa</button> 
+                                <script>
+                                    $('#modify').on('click', function(){
+                                        $.post("API.aspx",
+                                        {
+                                            action: 'modify',
+                                            id: id_user,
+                                            name: $('#name').val(),
+                                            email: $('#email').val(),
+                                        },
+                                        function (data) {
+                                            var j = JSON.parse(data);
+                                            if (j.ok) {
+                                                $.alert("Sửa đổi thành công");                                               
+                                            }
+                                            else {
+                                                $.alert("Sửa đổi thất bại: " + j.msg);
+                                            }
+                                        });
+                                    });
+                             </script>
+                              </div>
+                            </div>
+                            <div class="mb-4 bg-body-tertiary rounded-3">
+                              <div class="container-fluid">
+                                <h1 class="display-6 fw-bold p-4">Đổi mật khẩu</h1>    
+                                <div class="form-floating mt-3 mb-3">
+                                  <input type="text" class="form-control" id="password" placeholder="Enter old password">
+                                  <label >Old Password</label>
+                                </div>
+                                <div class="form-floating mt-3 mb-3">
+                                  <input type="text" class="form-control" id="newpassword" placeholder="Enter new password">
+                                  <label >New Password</label>
+                                  <button class="btn btn-primary" id="changepw" type="button">Đổi mật khẩu</button>  
+                                   <script>
+                                    $('#changepw').on('click', function(){
+                                        $.post("API.aspx",
+                                        {
+                                            action: 'changepw',
+                                            email: '${j.email}',
+                                            password: $('#password').val(),
+                                            newpassword: $('#newpassword').val(),
+                                        },
+                                        function (data) {
+                                            var j = JSON.parse(data);
+                                            if (j.ok) {
+                                                $.alert("Đổi mật khẩu thành công");    
+                                                $('#password').html("");
+                                                $('#newpassword').html("");
+                                            }
+                                            else {
+                                                $.alert("Sửa đổi thất bại: " + j.msg);
+                                            }
+                                        });
+                                    });
+                                    </script>
+                                </div>
+                              </div>
+                            </div>    
+                            `
+                        ,
 
-            }
-        });
+                    });
+                }
+                else {
+                    $.dialog("Lỗi gì đó");
+                }
+            });
+
+        
     });
 
     $('#logout').on('click', function () {
         $.confirm({
-            title: 'Đăng xuất!',
+            title: 'Đăng xuất!',           
             content: 'Bạn có muốn đăng xuất không ?',
             type: 'red',
             typeAnimated: true,
@@ -198,10 +243,9 @@ $(document).ready(function () {
                                     eraseCookie("cookie");
                                     $('#name_of_user').html("");
                                     $('#balance').html("");
-                                    $('#login').css("display", "block");
-                                    $('#signup').css("display", "block");
-                                    $('#logout').css("display", "none");
-                                    $('.aciton_btn').css("display", "none");
+                                    $('.nologin button').css("display", "block");
+                                    $('.logged button').css("display", "none");
+                                    $('.aciton_btn button').css("display", "none");
                                     check_login = false;
                                     id_user = null;
                                     cookie = null;
@@ -256,7 +300,6 @@ $(document).ready(function () {
                     text: 'Thêm',
                     btnClass: 'btn-primary',
                     action: function () {
-                        let id_ca = $('#add_money').val();
                         $.post("API.aspx",
                             {
                                 action: 'add_income',
@@ -270,6 +313,7 @@ $(document).ready(function () {
                                 var j = JSON.parse(data);
                                 if (j.ok) {
                                     $.alert("Thêm thành công");
+                                    $('#balance span').html(parseInt($('#balance span').html()) + parseInt($('#add_money').val()));
                                     income();
                                 }
                                 else {
@@ -288,6 +332,7 @@ $(document).ready(function () {
             }
         });
     });
+
     $('#add_expense').on('click', function () {
 
         $.confirm({
@@ -337,6 +382,7 @@ $(document).ready(function () {
                                 var j = JSON.parse(data);
                                 if (j.ok) {
                                     $.alert("Thêm thành công");
+                                    $('#balance span').html(parseInt($('#balance span').html()) - parseInt($('#add_money').val()));
                                     income();
                                 }
                                 else {
@@ -414,17 +460,97 @@ $(document).ready(function () {
     });
 
     $('#statistic_income').on('click', function () {
-        $.confirm({
-            title: 'Thống kê nguồn thu',
+        $.dialog({
+            title: 'Thống kê khoản chi',
             type: 'dark',
-            closeIcon: true,
             typeAnimated: true,
             columnClass: 'xlarge',
             content: `
-            <div id="statistic_income_chart" style="width: 100%; height: 100%;">    
+            <div class="d-flex">
+                <select class="form-select choose_target" aria-label="Default select example" id="target_month">
+                          <option value="0" selected>Chọn tháng</option>
+                          <option value="1">Tháng 1</option>
+                          <option value="2">Tháng 2</option>
+                          <option value="3">Tháng 3</option>
+                          <option value="4">Tháng 4</option>
+                          <option value="5">Tháng 5</option>
+                          <option value="6">Tháng 6</option>
+                          <option value="7">Tháng 7</option>
+                          <option value="8">Tháng 8</option>
+                          <option value="9">Tháng 9</option>
+                          <option value="10">Tháng 10</option>
+                          <option value="11">Tháng 11</option>
+                          <option value="12">Tháng 12</option>
+                </select>
+                <select class="form-select choose_target" aria-label="Default select example" id="target_year">
+                          <option value="2022">Năm 2022</option>
+                          <option value="2023" selected>Năm 2023</option>
+                </select>
+            </div>
+            <div id="statistic_income_chart" style="width: 100%; height: 100%;"> </div>   
+            <script>
+                $('.choose_target').on('change', function (){
+                    var target_month = $('#target_month').val();
+                    var target_year = $('#target_year').val();
+                    drawColumnChart("statistic_income",target_month, target_year,"statistic_income_chart");
+                });
+            </script>
             `,
+            onAction: function () {
+                
+            },
             onContentReady: function () {
-              drawColumnChart();
+                var target_month = new Date().getMonth() + 1;
+                var target_year = new Date().getFullYear();
+                drawColumnChart("statistic_income", target_month, target_year, "statistic_income_chart");
+            }
+        });
+    });
+
+    $('#statistic_expense').on('click', function () {
+        $.dialog({
+            title: 'Thống kê khoản chi',
+            type: 'dark',
+            typeAnimated: true,
+            columnClass: 'xlarge',
+            content: `
+            <div class="d-flex">
+                <select class="form-select choose_target" aria-label="Default select example" id="target_month">
+                          <option value="0" selected>Chọn tháng</option>
+                          <option value="1">Tháng 1</option>
+                          <option value="2">Tháng 2</option>
+                          <option value="3">Tháng 3</option>
+                          <option value="4">Tháng 4</option>
+                          <option value="5">Tháng 5</option>
+                          <option value="6">Tháng 6</option>
+                          <option value="7">Tháng 7</option>
+                          <option value="8">Tháng 8</option>
+                          <option value="9">Tháng 9</option>
+                          <option value="10">Tháng 10</option>
+                          <option value="11">Tháng 11</option>
+                          <option value="12">Tháng 12</option>
+                </select>
+                <select class="form-select choose_target" aria-label="Default select example" id="target_year">
+                          <option value="2022">Năm 2022</option>
+                          <option value="2023" selected>Năm 2023</option>
+                </select>
+            </div>
+            <div id="statistic_expense_chart" style="width: 100%; height: 100%;"> </div>   
+            <script>
+                $('.choose_target').on('change', function (){
+                    var target_month = $('#target_month').val();
+                    var target_year = $('#target_year').val();
+                    drawColumnChart("statistic_expense",target_month, target_year,"statistic_expense_chart");
+                });
+            </script>
+            `,
+            onAction: function () {
+
+            },
+            onContentReady: function () {
+                var target_month = new Date().getMonth() + 1;
+                var target_year = new Date().getFullYear();
+                drawColumnChart("statistic_expense", target_month, target_year, "statistic_expense_chart");
             }
         });
     });
@@ -436,10 +562,9 @@ $(document).ready(function () {
         else {
             $('#income_table').loading();
             income();
-            $('#add_income').css("display", "block");
+            $('.aciton_btn button').css("display", "block");
         }
     });
-
     $('#expense_btn').on('click', function () {
         if (check_login == false) {
             $.alert("Cần phải đăng nhập trước");
@@ -447,7 +572,7 @@ $(document).ready(function () {
         else {
             $('#expense_table').loading();
             expense();
-            $('#add_expense').css("display", "block");
+            $('.aciton_btn button').css("display", "block");
         }
     });
 
@@ -489,9 +614,8 @@ function ck_login(check_login) {
                     if (j.ok) {
                         $('#name_of_user').html("Xin chào, " + j.name);
                         $('#balance').html("Số dư: " + '<span>' + j.balance + '</span>');
-                        $('#login').css("display", "none");
-                        $('#signup').css("display", "none");
-                        $('#logout').css("display", "block");
+                        $('.nologin button').css("display", "none");
+                        $('.logged button').css("display", "block");
                         return true;
                     }
                     else {
@@ -550,10 +674,18 @@ function income() {
             }
             else {
                 $.alert("Tải thất bại: " + j.msg);
+                $('#income_table').loading('stop');
             }
 
             $('.delete_btn').on('click', function () {
                 let iid = $(this).attr("data-id");
+                var income;
+                for (var item of j.datas) {
+                    if (item.id == iid) {
+                        income = item;
+                        break;
+                    }
+                }
                 $.confirm({
                     title: 'Xoá',
                     content: `
@@ -572,7 +704,8 @@ function income() {
                                         var j = JSON.parse(data);
                                         if (j.ok) {
                                             $.alert("Xoá thành công");
-                                            return income();
+                                            $('#balance span').html(parseInt($('#balance span').html()) - parseInt(income.money));
+                                            income();
                                         }
                                         else {
                                             $.alert("Xoá thất bại: " + j.msg);
@@ -592,8 +725,8 @@ function income() {
             });
 
             $('.modify_btn').on('click', function () {
-                let iid = $(this).attr("data-id");
-                let income;
+                var iid = $(this).attr("data-id");
+                var income;
                 for (var item of j.datas) {
                     if (item.id == iid) {
                         income = item;
@@ -645,10 +778,12 @@ function income() {
                                         var j = JSON.parse(data);
                                         if (j.ok) {
                                             $.alert("Sửa thành công");
-                                            return income();
+                                            $('#balance span').html(parseInt($('#balance span').html()) + parseInt($('#modify_money').val()) - parseInt(income.money));
+                                            income();
                                         }
                                         else {
                                             $.alert("Sửa thất bại: " + j.msg);
+
                                         }
                                         
                                     }
@@ -712,10 +847,18 @@ function expense() {
             }
             else {
                 $.alert("Tải thất bại: " + j.msg);
+                $('#income_table').loading('stop');
             }
 
             $('.delete_btn').on('click', function () {
-                let iid = $(this).attr("data-id");
+                var iid = $(this).attr("data-id");
+                var expense;
+                for (var item of j.datas) {
+                    if (item.id == iid) {
+                        expense = item;
+                        break;
+                    }
+                }
                 $.confirm({
                     title: 'Xoá',
                     content: `
@@ -734,7 +877,8 @@ function expense() {
                                         var j = JSON.parse(data);
                                         if (j.ok) {
                                             $.alert("Xoá thành công");
-                                            return expense();
+                                            $('#balance span').html(parseInt($('#balance span').html()) + parseInt(expense.money));
+                                            expense();
                                         }
                                         else {
                                             $.alert("Xoá thất bại: " + j.msg);
@@ -754,8 +898,8 @@ function expense() {
             });
 
             $('.modify_btn').on('click', function () {
-                let iid = $(this).attr("data-id");
-                let expense;
+                var iid = $(this).attr("data-id");
+                var expense;
                 for (var item of j.datas) {
                     if (item.id == iid) {
                         expense = item;
@@ -808,7 +952,8 @@ function expense() {
                                         var j = JSON.parse(data);
                                         if (j.ok) {
                                             $.alert("Sửa thành công");
-                                            return expense();
+                                            $('#balance span').html(parseInt($('#balance span').html()) - parseInt($('#modify_money').val()) + parseInt(expense.money));
+                                            expense();
                                         }
                                         else {
                                             $.alert("Sửa thất bại: " + j.msg);
@@ -873,6 +1018,7 @@ function target() {
             }
             else {
                 $.alert("Tải thất bại: " + j.msg);
+                $('#income_table').loading('stop');
             }
 
             $('.delete_btn').on('click', function () {
@@ -895,7 +1041,7 @@ function target() {
                                         var j = JSON.parse(data);
                                         if (j.ok) {
                                             $.alert("Xoá thành công");
-                                            return target();
+                                            target();
                                         }
                                         else {
                                             $.alert("Xoá thất bại: " + j.msg);
@@ -958,7 +1104,7 @@ function target() {
                                         var j = JSON.parse(data);
                                         if (j.ok) {
                                             $.alert("Sửa thành công");
-                                            return target();
+                                            target();
                                         }
                                         else {
                                             $.alert("Sửa thất bại: " + j.msg);
@@ -988,80 +1134,99 @@ function home() {
         },
         function (data) {       
             var json = JSON.parse(data);
-            var inc = [];
-            var exp = [];
-            for (var item of json.income) {    
-                var name = item.name;
-                var total = item.total;         
-                inc.push([name, total])     
-            } 
-            for (var item of json.expense) {
-                var name = item.name;
-                var total = item.total;
-                exp.push([name, total])
-            } 
-            drawPieChart(inc, 'Tổng nguồn thu', 'chart_income');
-            drawPieChart(exp, 'Tổng khoản chi', 'chart_expense');
-            $('#home_chart').loading('stop');
+            if (json.ok) {
+                var inc = [];
+                var exp = [];
+                for (var item of json.income) {
+                    var name = item.name;
+                    var total = item.total;
+                    inc.push([name, total])
+                }
+                for (var item of json.expense) {
+                    var name = item.name;
+                    var total = item.total;
+                    exp.push([name, total])
+                }
+                drawPieChart(inc, 'Tổng nguồn thu', 'chart_income');
+                drawPieChart(exp, 'Tổng khoản chi', 'chart_expense');
+                $('#home_chart').loading('stop');
+            }
+            else {
+                $.alert("Lỗi thì phải:" + json.msg);
+                $('#home_chart').loading('stop');
+            }
         })
 }
-function drawPieChart(inc,a,b) {
+function drawPieChart(arr,title,id_chart) {
         // Create the data table.
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'ok');
         data.addColumn('number', 'gege');
-        data.addRows(inc);
+        data.addRows(arr);
 
         // Set chart options
         var options = {
-            'title': a,
+            'title': title,
         'width': 500,
         'height': 500
         };
 
         // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.PieChart(document.getElementById(b));
+    var chart = new google.visualization.PieChart(document.getElementById(id_chart));
         chart.draw(data, options);
 }
-
-function drawColumnChart() {
+function drawColumnChart(action,target_month,target_year,id_chart) {
     var arr = [];
-    arr.push(["Element", "Density", { role: "style" }]);
+    arr.push(["Day", "Money", { role: "style" }]);
     $.post("API.aspx",
         {
-            action: "statistic_income",
+            action: action,
             id_user: id_user,
-            target_month: 10,
-            target_year: 2023
+            target_month: target_month,
+            target_year: target_year
         },
         function (data) {
             var json = JSON.parse(data);
-            for (var item of json.datas) {
-                var day = item.day;
-                var money = item.money; 
-                var style = "#76A7FA";
-                arr.push([day, money,style])
-            }           
-            var data = google.visualization.arrayToDataTable(arr);
-            var view = new google.visualization.DataView(data);
-            view.setColumns([0, 1,
-                {
-                    calc: "stringify",
-                    sourceColumn: 1,
-                    type: "string",
-                    role: "annotation"
-                },
-                2]);
+            if (json.ok) {
+                var ini = 0;
+                for (var i = 0; i < 31; i++) {
+                    var item = json.datas[ini];
+                    var value = json.datas[ini]?.day;
+                    if (value == i) {
+                        var dayy = item.day.toString();
+                        var money = item.money;
+                        var style = "#76A7FA";
+                        arr.push([dayy, money, style]);
+                        ini++;
+                    }
+                    else {
+                        arr.push([i.toString(), 0, style]);
+                    }
+                }
+                var data = google.visualization.arrayToDataTable(arr);
+                var view = new google.visualization.DataView(data);
+                view.setColumns([0, 1,
+                    {
+                        calc: "stringify",
+                        sourceColumn: 1,
+                        type: "string",
+                        role: "annotation"
+                    },
+                    2]);
 
-            var options = {
-                title: "Density of Precious Metals, in g/cm^3",
-                width: 600,
-                height: 400,
-                bar: { groupWidth: "95%" },
-                legend: { position: "none" },
-            };
-            var chart = new google.visualization.ColumnChart(document.getElementById("statistic_income_chart"));
-            chart.draw(view, options);
+                var options = {
+                    title: 'Thống kê khoản chi tháng ' + target_month + ' năm ' + target_year,
+                    width: 1150,
+                    height: 400,
+                    bar: { groupWidth: "95%" },
+                    legend: { position: "none" },
+                };
+                var chart = new google.visualization.ColumnChart(document.getElementById(id_chart));
+                chart.draw(view, options);
+            }
+            else {
+                $('#'+id_chart).html("KHÔNG CÓ DỮ LIỆU");
+            }
         });
 }
 function setCookie(cname, cvalue, exdays) {
