@@ -674,6 +674,7 @@ function income() {
             }
             else {
                 $.alert("Tải thất bại: " + j.msg);
+                $('#income_table').loading('stop');
             }
 
             $('.delete_btn').on('click', function () {
@@ -782,6 +783,7 @@ function income() {
                                         }
                                         else {
                                             $.alert("Sửa thất bại: " + j.msg);
+
                                         }
                                         
                                     }
@@ -845,6 +847,7 @@ function expense() {
             }
             else {
                 $.alert("Tải thất bại: " + j.msg);
+                $('#income_table').loading('stop');
             }
 
             $('.delete_btn').on('click', function () {
@@ -1015,6 +1018,7 @@ function target() {
             }
             else {
                 $.alert("Tải thất bại: " + j.msg);
+                $('#income_table').loading('stop');
             }
 
             $('.delete_btn').on('click', function () {
@@ -1130,21 +1134,27 @@ function home() {
         },
         function (data) {       
             var json = JSON.parse(data);
-            var inc = [];
-            var exp = [];
-            for (var item of json.income) {    
-                var name = item.name;
-                var total = item.total;         
-                inc.push([name, total])     
-            } 
-            for (var item of json.expense) {
-                var name = item.name;
-                var total = item.total;
-                exp.push([name, total])
-            } 
-            drawPieChart(inc, 'Tổng nguồn thu', 'chart_income');
-            drawPieChart(exp, 'Tổng khoản chi', 'chart_expense');
-            $('#home_chart').loading('stop');
+            if (json.ok) {
+                var inc = [];
+                var exp = [];
+                for (var item of json.income) {
+                    var name = item.name;
+                    var total = item.total;
+                    inc.push([name, total])
+                }
+                for (var item of json.expense) {
+                    var name = item.name;
+                    var total = item.total;
+                    exp.push([name, total])
+                }
+                drawPieChart(inc, 'Tổng nguồn thu', 'chart_income');
+                drawPieChart(exp, 'Tổng khoản chi', 'chart_expense');
+                $('#home_chart').loading('stop');
+            }
+            else {
+                $.alert("Lỗi thì phải:" + json.msg);
+                $('#home_chart').loading('stop');
+            }
         })
 }
 function drawPieChart(arr,title,id_chart) {
