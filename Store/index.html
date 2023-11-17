@@ -35,9 +35,14 @@
         <button class="tablinks" id="income_btn" onclick="openCity(event, 'Income')">Income</button>
         <button class="tablinks" id="expense_btn" onclick="openCity(event, 'Expense')">Expense</button>
         <button class="tablinks" id="target_btn" onclick="openCity(event, 'Target')">Target</button>
-        <button style="float:right" id="login" class="tablinks">Log in</button>
-        <button style="float:right" id="signup" class="tablinks">Sign up</button>
-        <button style="float:right; display:none" id="logout" class="tablinks">Log out</button>
+        <div class="nologin">
+            <button style="float:right" id="login" class="tablinks">Log in</button>
+            <button style="float:right" id="signup" class="tablinks">Sign up</button>
+        </div>  
+        <div class="logged">
+            <button style="float:right; display:none" id="logout" class="tablinks">Log out</button>
+            <button style="float:right; display:none" id="setting" class="tablinks">Settings</button>
+        </div>
     </div>
 
     <!-- Tab content -->
@@ -58,14 +63,15 @@
     <div id="Income" class="tabcontent">
         <div class="aciton_btn d-flex">
             <button type="button" class="btn btn-primary" id="add_income" style="display:none">Thêm</button>
-            <button type="button" class="btn btn-primary" id="statistic_income">Thống kê</button>
+            <button type="button" class="btn btn-primary" id="statistic_income" style="display:none">Thống kê</button>
         </div>
-        <div id="income_table" class="table-responsive"></div>
+        <div id="income_table" class="table-responsive tablesor"></div>
     </div>
 
     <div id="Expense" class="tabcontent">
-        <div class="aciton_btn">
+        <div class="aciton_btn d-flex">
             <button type="button" class="btn btn-primary" id="add_expense" style="display:none">Thêm</button>
+            <button type="button" class="btn btn-primary" id="statistic_expense" style="display:none">Thống kê</button>
         </div>
         <div id="expense_table" class="table-responsive"></div>
     </div>
