@@ -105,7 +105,7 @@ $(document).ready(function () {
                                     dialog_login.close();
                                 }
                                 else {
-                                    $.alert("Đăng kí thất bại");
+                                    $.alert("Đăng kí thất bại" + j.msg);
                                     return false;
                                 }
                             });
@@ -461,7 +461,7 @@ $(document).ready(function () {
 
     $('#statistic_income').on('click', function () {
         $.dialog({
-            title: 'Thống kê khoản chi',
+            title: 'Thống kê',
             type: 'dark',
             typeAnimated: true,
             columnClass: 'xlarge',
@@ -509,7 +509,7 @@ $(document).ready(function () {
 
     $('#statistic_expense').on('click', function () {
         $.dialog({
-            title: 'Thống kê khoản chi',
+            title: 'Thống kê',
             type: 'dark',
             typeAnimated: true,
             columnClass: 'xlarge',
@@ -705,7 +705,7 @@ function income() {
                                         if (j.ok) {
                                             $.alert("Xoá thành công");
                                             $('#balance span').html(parseInt($('#balance span').html()) - parseInt(income.money));
-                                            income();
+                                            return income();
                                         }
                                         else {
                                             $.alert("Xoá thất bại: " + j.msg);
@@ -779,7 +779,7 @@ function income() {
                                         if (j.ok) {
                                             $.alert("Sửa thành công");
                                             $('#balance span').html(parseInt($('#balance span').html()) + parseInt($('#modify_money').val()) - parseInt(income.money));
-                                            income();
+                                            return income();
                                         }
                                         else {
                                             $.alert("Sửa thất bại: " + j.msg);
@@ -1189,7 +1189,7 @@ function drawColumnChart(action,target_month,target_year,id_chart) {
             var json = JSON.parse(data);
             if (json.ok) {
                 var ini = 0;
-                for (var i = 0; i < 31; i++) {
+                for (var i = 1; i < 31; i++) {
                     var item = json.datas[ini];
                     var value = json.datas[ini]?.day;
                     if (value == i) {
@@ -1215,7 +1215,7 @@ function drawColumnChart(action,target_month,target_year,id_chart) {
                     2]);
 
                 var options = {
-                    title: 'Thống kê khoản chi tháng ' + target_month + ' năm ' + target_year,
+                    title: 'Thống kê tháng ' + target_month + ' năm ' + target_year,
                     width: 1150,
                     height: 400,
                     bar: { groupWidth: "95%" },
