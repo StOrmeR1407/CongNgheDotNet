@@ -1215,7 +1215,7 @@ function drawColumnChart(action,target_month,target_year,id_chart) {
                     2]);
 
                 var options = {
-                    title: 'Thống kê tháng ' + target_month + ' năm ' + target_year,
+                    title: 'Thống kê tháng ' + target_month + ' năm ' + target_year + " Tổng số tiền: " + json.total +" vnd",
                     width: 1150,
                     height: 400,
                     bar: { groupWidth: "95%" },
