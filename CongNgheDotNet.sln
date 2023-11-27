@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Money", "Store\Money.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThucHanh", "ThucHanh\ThucHanh.csproj", "{563E9DE0-897B-4594-9ADC-B053CAA4C113}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReviewTeacher", "ReviewTeacher\ReviewTeacher.csproj", "{640BDD96-3A3E-449A-80A7-A1C3F4C3832C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{563E9DE0-897B-4594-9ADC-B053CAA4C113}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{563E9DE0-897B-4594-9ADC-B053CAA4C113}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{563E9DE0-897B-4594-9ADC-B053CAA4C113}.Release|Any CPU.Build.0 = Release|Any CPU
+		{640BDD96-3A3E-449A-80A7-A1C3F4C3832C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{640BDD96-3A3E-449A-80A7-A1C3F4C3832C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{640BDD96-3A3E-449A-80A7-A1C3F4C3832C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{640BDD96-3A3E-449A-80A7-A1C3F4C3832C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
