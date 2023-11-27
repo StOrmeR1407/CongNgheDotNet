@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Hệ thống quản lí đánh giá giáo viên</title>
+    <link link rel="icon" type="image/x-icon" href="src/review.ico" />
+    <!-- Jquery -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <!-- Jconfirm -->
+    <link href="vendor/jquery/jquery-confirm.css" rel="stylesheet" />
+    <script src="vendor/jquery/jquery-confirm.js"></script>
+    <!-- Bootstrap -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Loading -->
+    <script src="vendor/loading/jquery.loading.min.js"></script>
+    <!-- Custom -->
+    <link href="css.css" rel="stylesheet" />
+    <script src="js.js"></script>
+</head>
+<body>
+    <div class="h-100 p-5 text-white bg-dark rounded-3">
+        <h2>Đánh giá giáo viên Stormer</h2>
+        <h4 id="name_of_user" style="float:right"></h4>
+        <p>
+            Đánh giá tích cực, xây dựng niềm tin.
+        </p>
+    </div>
+
+    <div class="tab">
+        <button class="tablinks" onclick="openCity(event, 'London')">Home</button>
+        <button class="tablinks" onclick="openCity(event, 'Paris')">Khảo sát</button>
+        <button class="tablinks" onclick="openCity(event, 'Paris')">Thống kê</button>
+        <button class="tablinks float-end" id="logout" style="display:none">Log out</button>
+        <button class="tablinks float-end" id="login">Log in</button>
+        <button class="tablinks float-end" onclick="openCity(event, 'Tokyo')">Settings</button>
+        <button class="tablinks float-end" onclick="openCity(event, 'Tokyo')">Notification</button>
+    </div>
+
+    <!-- Tab content -->
+    <div id="London" class="tabcontent">
+        <h3>London</h3>
+        <p>London is the capital city of England.</p>
+    </div>
+
+    <div id="Paris" class="tabcontent">
+        <h3>Paris</h3>
+        <p>Paris is the capital of France.</p>
+    </div>
+
+    <div id="Tokyo" class="tabcontent">
+        <h3>Tokyo</h3>
+        <p>Tokyo is the capital of Japan.</p>
+    </div>
+</body>
+</html>
