@@ -7,11 +7,11 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Deployment.Internal;
-using SuatAn;
+using Money;
 using Newtonsoft.Json;
 using System.Data.SqlTypes;
 
-namespace Store
+namespace Money
 {
     public partial class API : System.Web.UI.Page
     {

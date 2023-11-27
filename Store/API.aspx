@@ -1,1 +1,1 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="API.aspx.cs" Inherits="Store.API" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="API.aspx.cs" Inherits="Money.API" %>

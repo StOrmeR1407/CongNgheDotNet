@@ -8,17 +8,25 @@
     <script src="jquery/jquery-confirm.js"></script>
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <script src="bootstrap/js/bootstrap.bundle.js"></script>
-    <link href="style.css" rel="stylesheet" />
-    <script src="script.js"></script>
-    <link href="tablesorter-master/dist/css/theme.default.min.css" rel="stylesheet" />
-    <script src="tablesorter-master/dist/js/jquery.tablesorter.js"></script>
-    <script src="tablesorter-master/dist/js/jquery.tablesorter.widgets.js"></script>
+    <!--Tablesorter-->
+    <link href="dataTable/jquery.dataTables.css" rel="stylesheet" />
+    <script src="dataTable/jquery.dataTables.js"></script>
+    <!--Loading-->
+    <script src="loading/jquery.loading.min.js"></script>
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <!--Custom-->
+    <script src="access/script.js"></script>
+    <link href="access/style.css" rel="stylesheet" />
 </head>
 <body>
     <!-- Tab links -->
     <div class="h-100 p-5 text-white bg-dark rounded-3">
-        <h2>Ví Stormer</h2>
-        <p>Tiền của bạn cũng là tiền của chúng tôi</p>
+        <h2>Ví Điện Tử</h2>
+        <h4 id="name_of_user" style="float:right"></h4>
+        <p>Quản lí tài chính, kiến tạo tương lai</p>
+        <p id="balance" style="float:right">
+        </p>
     </div>
     <div class="tab">
         <button class="tablinks" onclick="openCity(event, 'Home')">Home</button>
