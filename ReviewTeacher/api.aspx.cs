@@ -25,30 +25,32 @@ namespace ReviewTeacher
             {
                 case "checklogin":
                 case "login":
-                case "signup":
-                case "modify":
                 case "logout":
+                case "checkmail":
+                case "check2FA":
                 case "changepw":
                     {
                         user_action(action);
                         break;
                     }
 
-                case "list_income":
-                case "add_income":
-                case "modify_income":
-                case "delete_income":
-                case "list_expense":
-                case "add_expense":
-                case "modify_expense":
-                case "delete_expense":
-                case "list_target":
-                case "add_target":
-                case "modify_target":
-                case "delete_target":
+                case "add_review_question":
+                case "modify_review_question":
+                case "add_review":
+                case "modify_review":
+                case "add_detail_review":
+                case "delete_detail_review":
+                case "add_detail_cos_review":
+                case "delete_detail_cos_review":
+                case "score":
                 case "statistic_general":
-                case "statistic_income":
-                case "statistic_expense":
+                case "list_review_for_student":
+                case "list_detail_cos_review":
+                case "list_detail_review":
+                case "list_review_for_admin":
+                case "list_review_question_for_student":
+                case "save_answer":
+                case "statistic_general_detail":
                     {
                         review(action);
                         break;
@@ -69,21 +71,6 @@ namespace ReviewTeacher
                         {
                             cm.Parameters.Add("@email", SqlDbType.VarChar, 100).Value = Request["email"];
                             cm.Parameters.Add("@password", SqlDbType.VarChar, 100).Value = Request["password"];
-                            break;
-                        }
-                    case "signup":
-                        {
-                            cm.Parameters.Add("@name", SqlDbType.NVarChar, 100).Value = Request["name"];
-                            cm.Parameters.Add("@username", SqlDbType.VarChar, 100).Value = Request["username"];
-                            cm.Parameters.Add("@password", SqlDbType.VarChar, 100).Value = Request["password"];
-                            cm.Parameters.Add("@email", SqlDbType.VarChar, 100).Value = Request["email"];
-                            break;
-                        }
-                    case "modify":
-                        {
-                            cm.Parameters.Add("@id", SqlDbType.Int).Value = Request["id"];
-                            cm.Parameters.Add("@name", SqlDbType.NVarChar, 100).Value = Request["name"];
-                            cm.Parameters.Add("@email", SqlDbType.VarChar, 100).Value = Request["email"];
                             break;
                         }
                     case "checklogin":
@@ -128,6 +115,85 @@ namespace ReviewTeacher
                 SqlCommand cm = db.GetCmd("SP_Review", action);
                 switch (action)
                 {
+                    case "add_review_question":
+                        {
+                            cm.Parameters.Add("@name", SqlDbType.NVarChar, 1000).Value = Request["name"];
+                            cm.Parameters.Add("@id_rc", SqlDbType.Int).Value = Request["id_rc"];
+                            break;
+                        }
+                    case "modify_review_question":
+                        {
+                            cm.Parameters.Add("@id", SqlDbType.Int).Value = Request["id"];
+                            cm.Parameters.Add("@name", SqlDbType.NVarChar, 1000).Value = Request["name"];
+                            cm.Parameters.Add("@id_rc", SqlDbType.Int).Value = Request["id_rc"];
+                            break;
+                        }
+                    case "add_review":
+                        {
+                            cm.Parameters.Add("@name", SqlDbType.NVarChar, 1000).Value = Request["name"];
+                            cm.Parameters.Add("@deadline", SqlDbType.Date).Value = Request["deadline"];
+                            break;
+                        }
+                    case "modify_review":
+                        {
+                            cm.Parameters.Add("@id", SqlDbType.Int).Value = Request["id"];
+                            cm.Parameters.Add("@name", SqlDbType.NVarChar, 1000).Value = Request["name"];
+                            cm.Parameters.Add("@deadline", SqlDbType.Date).Value = Request["deadline"];
+                            break;
+                        }
+                    case "add_detail_review":
+                        {
+                            cm.Parameters.Add("@id_rv", SqlDbType.Int).Value = Request["id_rv"];
+                            cm.Parameters.Add("@id_rq", SqlDbType.Int).Value = Request["id_rq"];
+                            break;
+                        }
+                    case "delete_detail_review":
+                    case "delete_detail_cos_review":
+                        {
+                            cm.Parameters.Add("@id", SqlDbType.Int).Value = Request["id"];
+                            break;
+                        }
+                    case "add_detail_cos_review":
+                        {
+                            cm.Parameters.Add("@id_rv", SqlDbType.Int).Value = Request["id_rv"];
+                            cm.Parameters.Add("@id_cos", SqlDbType.Int).Value = Request["id_cos"];
+                            break;
+                        }
+                    case "score":
+                    case "statistic_general_detail":
+
+                        {
+                            cm.Parameters.Add("@id_rc", SqlDbType.Int).Value = Request["id_rc"];
+                            cm.Parameters.Add("@id_cos", SqlDbType.Int).Value = Request["id_cos"];
+                            cm.Parameters.Add("@tt_score", SqlDbType.Float).Value = Request["tt_score"];
+                            break;
+                        }
+                    case "statistic_general":
+                    case "list_review_for_admin":
+                        {
+                            break;
+                        }
+                    case "list_review_for_student":
+                        {
+                            cm.Parameters.Add("@id_user", SqlDbType.Int).Value = Request["id_user"];
+                            break;
+                        }
+                    case "list_review_question_for_student":
+                    case "list_detail_review":
+                    case "list_detail_cos_review":
+                        {
+                            cm.Parameters.Add("@id_rv", SqlDbType.Int).Value = Request["id_rv"];
+                            break;
+                        }
+                    case "save_answer":
+                        {
+                            cm.Parameters.Add("@id_user", SqlDbType.Int).Value = Request["id_user"];
+                            cm.Parameters.Add("@id_rv", SqlDbType.Int).Value = Request["id_rv"];
+                            cm.Parameters.Add("@id_cos", SqlDbType.Int).Value = Request["id_cos"];
+                            cm.Parameters.Add("@answer", SqlDbType.VarChar, 1000).Value = Request["answer"];
+                            cm.Parameters.Add("@time", SqlDbType.Date).Value = Request["time"];
+                            break;
+                        }
 
                 }
                 json = (string)db.Scalar(cm);

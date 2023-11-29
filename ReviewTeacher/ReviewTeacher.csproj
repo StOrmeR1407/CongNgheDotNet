@@ -97,9 +97,14 @@
     <Content Include="vendor\bootstrap\js\bootstrap.esm.min.js" />
     <Content Include="vendor\bootstrap\js\bootstrap.js" />
     <Content Include="vendor\bootstrap\js\bootstrap.min.js" />
+    <Content Include="vendor\dataTable\jquery.dataTables.css" />
+    <Content Include="vendor\dataTable\jquery.dataTables.js" />
+    <Content Include="vendor\fontawesome\brands.min.css" />
+    <Content Include="vendor\fontawesome\fontawesome.min.css" />
     <Content Include="vendor\jquery\jquery-confirm.css" />
     <Content Include="vendor\jquery\jquery-confirm.js" />
     <Content Include="vendor\jquery\jquery.min.js" />
+    <Content Include="vendor\fontawesome\solid.min.css" />
     <Content Include="vendor\loading\jquery.loading.js" />
     <Content Include="vendor\loading\jquery.loading.min.js" />
     <Content Include="vendor\loading\loading.css" />
